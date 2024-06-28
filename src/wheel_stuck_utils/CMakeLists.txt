@@ -14,9 +14,9 @@ endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
-ament_auto_add_library(autoware_universe_utils SHARED
-  src/hoge.cpp
-)
+# ament_auto_add_library(autoware_universe_utils SHARED
+#   src/source.cpp
+# )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
