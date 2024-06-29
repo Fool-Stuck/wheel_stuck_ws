@@ -10,6 +10,11 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>wheel_stuck_utils</depend>
   <test_depend>ament_lint_auto</test_depend>
 
   <export>

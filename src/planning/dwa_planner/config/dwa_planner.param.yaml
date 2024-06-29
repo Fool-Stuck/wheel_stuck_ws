@@ -1,0 +1,11 @@
+/**:
+  ros__parameters:
+    update_rate_hz: 20.0
+    min_velocity: 0.0
+    max_velocity: 0.5
+    max_acceleration: 0.5
+    max_angular_speed: 1.0
+    max_angular_acceleration: 1.0
+    prediction_time: 1.0
+    velocity_resolution: 10
+    angular_velocity_resolution: 10
