@@ -1,5 +1,7 @@
 #include "dwa_planner/dwa_planner.hpp"
 
+#include <limits>
+
 namespace dwa_planner
 {
 
@@ -177,7 +179,7 @@ DWAPlanner::Trajectory DWAPlanner::planning()
 
   Window window = generate_window(twist);
 
-  double min_cost = 1e6;
+  double min_cost = std::numeric_limits<double>::max();
   Trajectory best_trajectory;
 
   for (int v = 0; v < velocity_resolution_; v++) {
