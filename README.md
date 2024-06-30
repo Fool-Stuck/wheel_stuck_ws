@@ -17,9 +17,9 @@ Fool Stuck Robot
    ```bash
    sudo apt install -y python3-vcstool
    ```
-3. Clone repos
+3. Clone repos and cd into dir
    ```bash
-   git clone https://github.com/Fool-Stuck/wheel-stuck-ros-pkgs.git
+   git clone https://github.com/Fool-Stuck/wheel-stuck-ros-pkgs.git && cd wheel-stuck-ros-pkgs
    ```
 4. Import depend pkgs(source)
    ```bash
