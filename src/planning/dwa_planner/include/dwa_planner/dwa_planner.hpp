@@ -21,9 +21,9 @@ using PoseStamped = geometry_msgs::msg::PoseStamped;
 using Twist = geometry_msgs::msg::Twist;
 using TwistStamped = geometry_msgs::msg::TwistStamped;
 
-using OccupancyGridSubscription = wheel_stuck_utils::NoCallbackSubscription<OccupancyGrid>;
-using OdometrySubscription = wheel_stuck_utils::NoCallbackSubscription<Odometry>;
-using PoseStampedSubscription = wheel_stuck_utils::NoCallbackSubscription<PoseStamped>;
+using OccupancyGridSubscription = wheel_stuck_utils::ros::NoCallbackSubscription<OccupancyGrid>;
+using OdometrySubscription = wheel_stuck_utils::ros::NoCallbackSubscription<Odometry>;
+using PoseStampedSubscription = wheel_stuck_utils::ros::NoCallbackSubscription<PoseStamped>;
 using TwistStampedPublisher = rclcpp::Publisher<TwistStamped>;
 
 class DWAPlanner : public rclcpp::Node
