@@ -3,7 +3,7 @@
 <package format="3">
   <name>dwa_planner</name>
   <version>0.0.0</version>
-  <description>The __PACKAGE_NAME__ package</description>
+  <description>The dwa_planner package</description>
   <maintainer email="harada.akiro@gmail.com">Akiro Harada</maintainer>
 
   <license>Apache 2</license>
