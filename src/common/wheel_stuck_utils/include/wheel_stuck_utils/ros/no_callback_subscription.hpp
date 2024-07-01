@@ -3,7 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-namespace wheel_stuck_utils
+namespace wheel_stuck_utils::ros
 {
 
 template <typename TMessage>
