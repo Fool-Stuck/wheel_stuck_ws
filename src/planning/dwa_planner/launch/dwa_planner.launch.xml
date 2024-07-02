@@ -1,18 +1,18 @@
 <launch>
-    <arg name="local_costmap_topic" default="/perception/costmap" />
-    <arg name="odom_topic" default="/localization/odom" />
-    <arg name="local_goal_topic" default="/planning/local_goal" />
-    <arg name="cmd_vel_topic" default="/planning/cmd_vel" />
+  <arg name="local_costmap_topic" default="/perception/costmap" />
+  <arg name="odom_topic" default="/localization/odom" />
+  <arg name="local_goal_topic" default="/planning/local_goal" />
+  <arg name="cmd_vel_topic" default="/planning/cmd_vel" />
 
-    <arg name="config_file"
-        default="$(find-pkg-share dwa_planner)/config/dwa_planner.param.yaml" />
+  <arg name="config_file"
+    default="$(find-pkg-share dwa_planner)/config/dwa_planner.param.yaml" />
 
-    <node pkg="dwa_planner" name="dwa_planner" exec="dwa_planner_node"
-        output="screen">
-        <remap from="~/input/local_costmap" to="$(var local_costmap_topic)" />
-        <remap from="~/input/odom" to="$(var odom_topic)" />
-        <remap from="~/input/local_goal" to="$(var local_goal_topic)" />
-        <remap from="~/output/cmd_vel" to="$(var cmd_vel_topic)" />
-        <param from="$(var config_file)" />
-    </node>
+  <node pkg="dwa_planner" name="dwa_planner" exec="dwa_planner_node"
+    output="screen">
+    <remap from="~/input/local_costmap" to="$(var local_costmap_topic)" />
+    <remap from="~/input/odom" to="$(var odom_topic)" />
+    <remap from="~/input/local_goal" to="$(var local_goal_topic)" />
+    <remap from="~/output/cmd_vel" to="$(var cmd_vel_topic)" />
+    <param from="$(var config_file)" />
+  </node>
 </launch>
