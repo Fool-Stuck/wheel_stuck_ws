@@ -1,0 +1,69 @@
+name: build-and-test
+
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  make-sure-label-is-present:
+    uses: ./.github/workflows/labelcheck.yaml
+    with:
+      label: tag:run-build-and-test
+  build_and_test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+        rosdistro:
+          - humble
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: ros:${{ matrix.rosdistro }}-ros-base
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          path: wheel_stuck_ws
+
+      - name: Install dependencies
+        run: |
+          cd wheel_stuck_ws &&
+          rosdep update &&
+          apt-get update &&
+          rosdep install --from-path . -i -y --rosdistro ${{ matrix.rosdistro }}
+
+      - name: Install diagnostic-updater
+        run: apt-get install ros-${{ matrix.rosdistro }}-diagnostic-updater
+
+      - name: Build tests
+        id: build_test
+        run: |
+          . /opt/ros/${{ matrix.rosdistro }}/setup.sh && 
+          colcon build
+        continue-on-error: true
+
+      - name: build_test command success
+        if: steps.build_test.outcome == 'success'
+        run: echo "result - success"
+
+      - name: build_test command failure
+        if: steps.build_test.outcome == 'failure'
+        run: echo "result - failure" && exit 1
+
+      - name: Run tests
+        id: run_test
+        run: |
+          . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
+          colcon test && 
+          colcon test-result
+        continue-on-error: true
+
+      - name: run_test command success
+        if: steps.run_test.outcome == 'success'
+        run: echo "result - success"
+
+      - name: run_test command failure
+        if: steps.run_test.outcome == 'failure'
+        run: echo "result - failure" && exit 1
