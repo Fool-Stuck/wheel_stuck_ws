@@ -3,6 +3,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <memory>
+#include <string>
+
 namespace wheel_stuck_utils::ros
 {
 
@@ -43,6 +46,6 @@ public:
   }
 };
 
-}  // namespace wheel_stuck_utils
+}  // namespace wheel_stuck_utils::ros
 
-#endif
+#endif  // WHEEL_STUCK_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_
