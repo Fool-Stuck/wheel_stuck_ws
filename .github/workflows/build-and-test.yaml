@@ -5,7 +5,7 @@ on:
     branches: [main]
 jobs:
   make-sure-label-is-present:
-    uses: ./.github/workflows/labelcheck.yaml
+    uses: ./.github/workflows/label-check.yaml
     with:
       label: tag:run-build-and-test
   build_and_test:
