@@ -9,6 +9,8 @@ jobs:
     with:
       label: tag:run-build-and-test
   build_and_test:
+    needs: label-check
+    if: ${{ needs.label-check.outputs.result == 'true' }}
     strategy:
       matrix:
         os:
