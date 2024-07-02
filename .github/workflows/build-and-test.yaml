@@ -36,7 +36,7 @@ jobs:
       - name: Build tests
         id: build_test
         run: |
-          . /opt/ros/${{ matrix.rosdistro }}/setup.sh && 
+          . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
           colcon build
         continue-on-error: true
 
@@ -52,7 +52,7 @@ jobs:
         id: run_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
-          colcon test && 
+          colcon test &&
           colcon test-result
         continue-on-error: true
 
