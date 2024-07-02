@@ -4,13 +4,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  label-check:
-    uses: ./.github/workflows/label-check.yaml
-    with:
-      label: tag:run-build-and-test
   build_and_test:
-    needs: label-check
-    if: ${{ needs.label-check.outputs.result == 'true' }}
     strategy:
       matrix:
         os:
