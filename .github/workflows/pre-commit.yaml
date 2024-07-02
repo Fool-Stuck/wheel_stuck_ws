@@ -1,0 +1,33 @@
+name: pre-commit
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - uses: pre-commit/action@v3.0.0
+
+      - run: pre-commit autoupdate
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: ${{ github.event.repository.default_branch }}
+          branch: update/pre-commit-autoupdate
+          title: "build(deps): bump pre-commit autoupdate"
+          commit-message: "build(deps): bump pre-commit autoupdate"
+          body: |
+            Update versions of tools in pre-commit
+            configs to latest version
+          add-paths: |
+            .pre-commit-config.yaml
+          assignees: ${{ github.actor }}
+          reviewers: ${{ github.actor }}
