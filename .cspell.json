@@ -41,5 +41,20 @@
       "ignoreRegExpList": ["@author .*$", "[\\@]tparam", "\\author .*$", "Author(s)?( )?: .*$"]
     }
   ],
-  "words": []
+  "words": [
+    "buildtool",
+    "colcon",
+    "costmap",
+    "DCMAKE",
+    "GNUCXX",
+    "odometry",
+    "pkg",
+    "pkgs",
+    "rclcpp",
+    "rosdep",
+    "schematypens",
+    "vcstool",
+    "Wextra",
+    "Wpedantic"
+  ]
 }
