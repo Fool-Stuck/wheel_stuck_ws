@@ -1,0 +1,10 @@
+<launch>
+  <arg name="topic" default="/sample/int"/>
+
+  <arg name="config_file" default="$(find-pkg-share simple_int_publisher)/config/simple_int_publisher.param.yaml"/>
+
+  <node pkg="simple_int_publisher" name="simple_int_publisher" exec="simple_int_publisher_node" output="screen">
+    <remap from="~/output/int" to="$(var topic)"/>
+    <param from="$(var config_file)"/>
+  </node>
+</launch>
