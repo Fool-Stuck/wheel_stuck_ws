@@ -18,9 +18,8 @@ public:
   explicit SimpleIntPublisher(const rclcpp::NodeOptions & options);
   void update();
 
-  rclcpp::TimerBase::SharedPtr update_timer_;
-
 private:
+  rclcpp::TimerBase::SharedPtr update_timer_;
   Int32Publisher::SharedPtr pub_;
   int counter_;
 };
