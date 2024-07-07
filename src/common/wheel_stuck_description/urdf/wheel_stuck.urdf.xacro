@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot name="wheel_stuck" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find wheel_stuck_description)/urdf/wheel/wheel.urdf.xacro"/>
+
+  <!-- =============== Link & Joint =============== -->
+  <!-- Base -->
+  <link name="base_footprint"/>
+  <xacro:base_v0 parent="base_footprint">
+	<origin xyz="0 0 0.20316"/>
+  </xacro:base_v0>
+
+  <!-- Wheel -->
+  <!-- Right Wheel -->
+  <xacro:wheel_v0 prefix="right" parent="base_link">
+	<origin xyz="0 -0.214375 0"/>
+	<axis xyz="0 1 0"/>
+  </xacro:wheel_v0>
+  <!-- Left Wheel -->
+  <xacro:wheel_v0 prefix="left" parent="base_link">
+	<origin xyz="0 0.214375 0" rpy="0 0 ${M_PI}"/>
+	<axis xyz="0 -1 0"/>
+  </xacro:wheel_v0>  
+</robot>
