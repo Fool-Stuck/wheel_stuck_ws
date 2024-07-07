@@ -23,11 +23,21 @@ rclcpp_components_register_node(simple_int_subscriber
   EXECUTABLE simple_int_subscriber_node
 )
 
+ament_auto_add_library(polling_int_subscriber SHARED
+  src/polling_int_subscriber.cpp
+)
+
+rclcpp_components_register_node(polling_int_subscriber
+  PLUGIN "simple_int_subscriber::PollingIntSubscriber"
+  EXECUTABLE polling_int_subscriber_node
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
 
 ament_auto_package(INSTALL_TO_SHARE
+  config
   launch
 )

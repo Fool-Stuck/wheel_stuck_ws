@@ -1,0 +1,10 @@
+<launch>
+  <arg name="topic" default="/sample/int"/>
+
+  <arg name="config_file" default="$(find-pkg-share simple_int_subscriber)/config/polling_int_subscriber.param.yaml"/>
+
+  <node pkg="simple_int_subscriber" name="polling_int_subscriber" exec="polling_int_subscriber_node" output="screen">
+    <remap from="~/input/int" to="$(var topic)"/>
+    <param from="$(var config_file)"/>
+  </node>
+</launch>
