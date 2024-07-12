@@ -33,13 +33,20 @@ Fool Stuck Robot
    vcs import src < depend_packages.repos --recursive
    ```
 
-5. Install depend pkgs(binary)
+5. SetUp rosdep
+
+   ```bash
+   sudo rosdep install
+   rosdep update
+   ```
+
+6. Install depend pkgs(binary)
 
    ```bash
    rosdep install -i -y --from-paths src --ignore-src
    ```
 
-6. Build
+7. Build
 
    ```bash
    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
