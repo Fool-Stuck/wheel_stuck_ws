@@ -33,7 +33,7 @@ Fool Stuck Robot
    vcs import src < depend_packages.repos --recursive
    ```
 
-5. SetUp rosdep
+5. Setup rosdep
 
    ```bash
    sudo rosdep install
