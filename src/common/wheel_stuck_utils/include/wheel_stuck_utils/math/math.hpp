@@ -10,7 +10,7 @@ inline double clamp01(double value)
   return std::clamp(value, 0.0, 1.0);
 }
 
-inline double lerp(const double a, const double b, double t)
+inline double lerp(const double a, const double b, const double t)
 {
   return a + clamp01(t) * (b - a);
 }
