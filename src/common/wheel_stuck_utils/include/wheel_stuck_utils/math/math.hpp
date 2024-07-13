@@ -12,8 +12,7 @@ inline double clamp01(double value)
 
 inline double lerp(const double a, const double b, double t)
 {
-  t = clamp01(t);
-  return a + t * (b - a);
+  return a + clamp01(t) * (b - a);
 }
 
 }  // namespace wheel_stuck_utils::math
