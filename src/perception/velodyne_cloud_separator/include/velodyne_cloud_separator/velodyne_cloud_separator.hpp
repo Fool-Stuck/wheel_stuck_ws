@@ -22,12 +22,12 @@ class VelodyneCloudSeparator : public rclcpp::Node
 {
 public:
   explicit VelodyneCloudSeparator(const rclcpp::NodeOptions & options);
-  void update();
-
-  rclcpp::TimerBase::SharedPtr update_timer_;
 
 private:
+  void update();
   bool try_subscribe_pc();
+
+  rclcpp::TimerBase::SharedPtr update_timer_;
 
   PointCloud2Subscription::SharedPtr pc_sub_;
   PointCloud2Publisher::SharedPtr pc_ground_pub_;
