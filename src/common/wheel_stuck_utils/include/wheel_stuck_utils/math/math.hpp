@@ -5,7 +5,7 @@
 
 namespace wheel_stuck_utils::math
 {
-inline double clamp01(double value)
+inline double clamp01(const double value)
 {
   return std::clamp(value, 0.0, 1.0);
 }
