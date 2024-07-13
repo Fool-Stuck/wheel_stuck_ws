@@ -5,11 +5,16 @@
 
 namespace wheel_stuck_utils::math
 {
-inline double lerp(const double a, const double b, double t)
+inline double clamp01(const double value)
 {
-  t = std::clamp(t, 0.0, 1.0);
-  return a + t * (b - a);
+  return std::clamp(value, 0.0, 1.0);
 }
+
+inline double lerp(const double a, const double b, const double t)
+{
+  return a + clamp01(t) * (b - a);
+}
+
 }  // namespace wheel_stuck_utils::math
 
 #endif  // WHEEL_STUCK_UTILS__MATH__MATH_HPP_
