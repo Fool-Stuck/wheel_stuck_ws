@@ -7,13 +7,13 @@ namespace wheel_stuck_utils::math
 {
 inline double lerp(const double a, const double b, double t)
 {
-  t = std::clamp(t, 0.0, 1.0);
+  t = std::clamp(t, clamp01);
   return a + t * (b - a);
 }
 
-inline double clamp(double value, double min, double max)
+inline double clamp01(double value)
 {
-  return std::max(min, std::min(value, max));
+  return std::clamp(value, 0.0, 1.0);
 }
 
 }  // namespace wheel_stuck_utils::math
