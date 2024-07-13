@@ -12,6 +12,12 @@ VelodyneCloudSeparator::VelodyneCloudSeparator(const rclcpp::NodeOptions & optio
 {
   // Declare Parameters
   double update_rate_hz = this->declare_parameter("update_rate_hz", 20.0);
+  double sensor_height = this->declare_parameter("sensor_height", 2.0);
+  double radius_coef_close = this->declare_parameter("radius_coef_close", 1.0);
+  double radius_coef_far = this->declare_parameter("radius_coef_far", 1.0);
+  limiting_ratio_ = this->declare_parameter("limiting_ratio", 0.1);
+  gap_threshold_ = this->declare_parameter("gap_threshold", 0.1);
+  min_points_num_ = this->declare_parameter("min_points_num", 3);
 
   // Declare Subscriptions
   {
@@ -34,6 +40,9 @@ VelodyneCloudSeparator::VelodyneCloudSeparator(const rclcpp::NodeOptions & optio
       this->get_node_base_interface()->get_context());
     this->get_node_timers_interface()->add_timer(update_timer_, nullptr);
   }
+
+  // Initialize
+  init(sensor_height, radius_coef_close, radius_coef_far);
 }
 
 void VelodyneCloudSeparator::init(
