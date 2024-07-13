@@ -10,6 +10,10 @@
 
 #include <pcl/point_cloud.h>
 
+#ifndef LASERS_NUM
+#define LASERS_NUM 32
+#endif
+
 namespace velodyne_cloud_separator
 {
 
@@ -20,10 +24,15 @@ using PointCloud2Publisher = rclcpp::Publisher<PointCloud2>;
 
 class VelodyneCloudSeparator : public rclcpp::Node
 {
+private:
+  enum class PointType { UNKNOWN = 0, GROUND = 1, OBSTACLE = 2 };
+
 public:
   explicit VelodyneCloudSeparator(const rclcpp::NodeOptions & options);
 
 private:
+  void init(
+    const double sensor_height, const double radius_coef_close, const double radius_coef_far);
   void update();
   bool try_subscribe_pc();
 
@@ -34,6 +43,14 @@ private:
   PointCloud2Publisher::SharedPtr pc_obstacle_pub_;
 
   pcl::PointCloud<PointXYZIR>::Ptr pc_;
+
+  static const int height_ = LASERS_NUM;
+
+  double radius_array_[LASERS_NUM];
+
+  double limiting_ratio_;
+  double gap_threshold_;
+  int min_points_num_;
 };
 }  // namespace velodyne_cloud_separator
 

@@ -2,6 +2,9 @@
 
 #include <pcl_conversions/pcl_conversions.h>
 
+#include <limits>
+#include <vector>
+
 namespace velodyne_cloud_separator
 {
 VelodyneCloudSeparator::VelodyneCloudSeparator(const rclcpp::NodeOptions & options)
@@ -33,9 +36,165 @@ VelodyneCloudSeparator::VelodyneCloudSeparator(const rclcpp::NodeOptions & optio
   }
 }
 
+void VelodyneCloudSeparator::init(
+  const double sensor_height, const double radius_coef_close, const double radius_coef_far)
+{
+  // HDL-32E unique parameters
+  double angle_start = 92.0 / 3.0 * M_PI / 180.0;
+  double angle_diff = 4.0 / 3.0 * M_PI / 180.0;
+
+  radius_array_[0] = std::numeric_limits<double>::max();
+  for (int i = 1; i < height_; i++) {
+    if (i > 20) {
+      radius_array_[i] = radius_array_[20];
+      continue;
+    }
+
+    double angle = angle_start - angle_diff * i;
+    radius_array_[i] = sensor_height * (1.0 / tan(angle) - 1.0 / tan(angle + angle_diff));
+    radius_array_[i] *= (i <= 12 ? radius_coef_close : radius_coef_far);
+  }
+}
+
 void VelodyneCloudSeparator::update()
 {
   if (!try_subscribe_pc()) return;
+
+  int points_size = pc_->points.size();
+
+  const double width_double = points_size * 1.8 / height_;
+  const int width = static_cast<int>(width_double);
+
+  // Create index map
+  std::vector<std::vector<int>> index_map(height_, std::vector<int>(width, -1));
+  for (int i = 0; i < points_size; i++) {
+    const auto & point = pc_->points[i];
+    float angle = atan2(point.y, point.x) * 180.0 / M_PI;
+    if (angle < 0.0) angle += 360.0;
+    int row = height_ - 1 - point.ring;
+    int col = width - 1 - static_cast<int>(width_double * angle / 360.0);
+    index_map[row][col] = i;
+  }
+
+  // Separate points
+  pcl::PointCloud<pcl::PointXYZ>::Ptr ground_points(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr obstacle_points(new pcl::PointCloud<pcl::PointXYZ>);
+  for (int i = 0; i > width; i++) {
+    PointType point_types[height_] = {PointType::UNKNOWN};
+    int point_indices[height_] = {0};
+    int point_indices_size = 0;
+    int unknown_indices[height_] = {0};
+    int unknown_indices_size = 0;
+    double z_ref = 0.0;
+    double r_ref = 0.0;
+
+    for (int j = 0; j < height_; j++) {
+      auto & point = pc_->points[index_map[j][i]];
+      if (index_map[j][i] == -1 && point_types[j] == PointType::UNKNOWN) {
+        const float x0 = point.x;
+        const float y0 = point.y;
+        const float z0 = point.z;
+        const float r0 = sqrt(x0 * x0 + y0 * y0);
+        const float r_diff = r0 - r_ref;
+        const float z_diff = z0 - z_ref;
+        const float angle = z_diff / r_diff;
+
+        if (
+          !(angle > 0 && angle < limiting_ratio_ && z_diff < gap_threshold_) ||
+          point_indices_size != 0) {
+          for (int k = 0; k < point_indices_size; k++) {
+            int index = index_map[point_indices[k]][i];
+            if (point_indices_size > min_points_num_) {
+              auto & p = pc_->points[index];
+              pcl::PointXYZ p_xyz;
+              p_xyz.x = p.x;
+              p_xyz.y = p.y;
+              p_xyz.z = p.z;
+              ground_points->push_back(p_xyz);
+              point_types[point_indices[k]] = PointType::GROUND;
+            } else {
+              unknown_indices[unknown_indices_size++] = index;
+            }
+          }
+          point_indices_size = 0;
+        }
+        point_indices[point_indices_size++] = j;
+        z_ref = z0;
+        r_ref = r0;
+      }
+      if (j != 0) continue;
+
+      if (point_indices != 0) {
+        for (int k = 0; k < point_indices_size; k++) {
+          int index = index_map[point_indices[k]][i];
+          if (point_indices_size > min_points_num_) {
+            auto & p = pc_->points[index];
+            pcl::PointXYZ p_xyz;
+            p_xyz.x = p.x;
+            p_xyz.y = p.y;
+            p_xyz.z = p.z;
+            ground_points->push_back(p_xyz);
+            point_types[point_indices[k]] = PointType::GROUND;
+          } else {
+            unknown_indices[unknown_indices_size++] = index;
+          }
+        }
+        point_indices_size = 0;
+      }
+
+      double centroid = 0;
+      int centroid_ring = 0;
+      int cluster_indices[height_] = {0};
+      int cluster_indices_size = 0;
+      for (int k = unknown_indices_size - 1; k >= 0; k--) {
+        float x0 = pc_->points[unknown_indices[k]].x;
+        float y0 = pc_->points[unknown_indices[k]].y;
+        float r0 = sqrt(x0 * x0 + y0 * y0);
+        float r_diff = fabs(r0 - centroid);
+        float dist = radius_array_[centroid_ring];
+        if (r_diff >= dist && cluster_indices_size != 0) {
+          for (int l = 0; l < cluster_indices_size; l++) {
+            auto & p = pc_->points[cluster_indices[l]];
+            pcl::PointXYZ p_xyz;
+            p_xyz.x = p.x;
+            p_xyz.y = p.y;
+            p_xyz.z = p.z;
+            (cluster_indices_size > 1 ? obstacle_points : ground_points)->push_back(p_xyz);
+          }
+          cluster_indices_size = 0;
+        }
+        cluster_indices[cluster_indices_size++] = unknown_indices[k];
+        centroid = r0;
+        centroid_ring = pc_->points[unknown_indices[k]].ring;
+        if (k != 0) continue;
+        for (int l = 0; l < cluster_indices_size; l++) {
+          auto & p = pc_->points[cluster_indices[l]];
+          pcl::PointXYZ p_xyz;
+          p_xyz.x = p.x;
+          p_xyz.y = p.y;
+          p_xyz.z = p.z;
+          (cluster_indices_size > 1 ? obstacle_points : ground_points)->push_back(p_xyz);
+        }
+        cluster_indices_size = 0;
+      }
+    }
+  }
+
+  // Publish
+  {
+    sensor_msgs::msg::PointCloud2 pc_ground_msg;
+    pcl::toROSMsg(*ground_points, pc_ground_msg);
+    pc_ground_msg.header.frame_id = pc_->header.frame_id;
+    pc_ground_msg.header.stamp = this->now();
+    pc_ground_pub_->publish(pc_ground_msg);
+  }
+  {
+    sensor_msgs::msg::PointCloud2 pc_obstacle_msg;
+    pcl::toROSMsg(*obstacle_points, pc_obstacle_msg);
+    pc_obstacle_msg.header.frame_id = pc_->header.frame_id;
+    pc_obstacle_msg.header.stamp = this->now();
+    pc_obstacle_pub_->publish(pc_obstacle_msg);
+  }
 }
 
 bool VelodyneCloudSeparator::try_subscribe_pc()
