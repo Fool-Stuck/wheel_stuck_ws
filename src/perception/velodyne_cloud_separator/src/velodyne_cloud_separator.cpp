@@ -208,7 +208,7 @@ void VelodyneCloudSeparator::update()
 
 bool VelodyneCloudSeparator::try_subscribe_pc()
 {
-  auto pc_msg = pc_sub_->getData();
+  auto pc_msg = pc_sub_->get_data();
   if (!pc_msg) return false;
   try {
     pc_ = pcl::PointCloud<PointXYZIR>::Ptr(new pcl::PointCloud<PointXYZIR>);
