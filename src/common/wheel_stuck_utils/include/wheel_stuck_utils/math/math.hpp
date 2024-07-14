@@ -16,7 +16,7 @@ inline double lerp(const double a, const double b, const double t)
 }
 
 // lerpの逆関数
-inline double inverselerp(const double a, const double b, const double value)
+inline double inverse_lerp(const double a, const double b, const double value)
 {
   if (a != b) {
     return clamp01((value - a) / (b - a));
@@ -26,12 +26,12 @@ inline double inverselerp(const double a, const double b, const double value)
 }
 
 // 符号(-1, 0, 1)を返す
-inline double sign(const double i)
+inline int sign(const double i)
 {
   return (i > 0) ? +1 : (i < 0) ? -1 : 0;
   /*
   if(i > 0)
-    return 1;;
+    return 1;
   else if(i < 0)
     return -1;
   else
