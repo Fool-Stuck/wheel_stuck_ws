@@ -37,7 +37,7 @@ public:
       noexec_subscription_options);
   }
 
-  typename TMessage::ConstSharedPtr getData()
+  typename TMessage::ConstSharedPtr get_data()
   {
     auto data = std::make_shared<TMessage>();
     rclcpp::MessageInfo message_info;
