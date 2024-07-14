@@ -151,7 +151,7 @@ bool DWAPlanner::subscribe_and_validate()
 
 bool DWAPlanner::try_subscribe_map()
 {
-  auto map_msg = map_sub_->getData();
+  auto map_msg = map_sub_->get_data();
   if (!map_msg) return false;
   map_ = map_msg;
   return true;
@@ -159,7 +159,7 @@ bool DWAPlanner::try_subscribe_map()
 
 bool DWAPlanner::try_subscribe_odom()
 {
-  auto odom_msg = odom_sub_->getData();
+  auto odom_msg = odom_sub_->get_data();
   if (!odom_msg) return false;
   odom_ = odom_msg;
   return true;
@@ -167,7 +167,7 @@ bool DWAPlanner::try_subscribe_odom()
 
 bool DWAPlanner::try_subscribe_goal()
 {
-  auto goal_msg = goal_sub_->getData();
+  auto goal_msg = goal_sub_->get_data();
   if (!goal_msg) return false;
   goal_ = goal_msg;
   return true;
