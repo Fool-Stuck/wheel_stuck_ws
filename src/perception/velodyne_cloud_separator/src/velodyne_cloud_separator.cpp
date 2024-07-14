@@ -12,12 +12,13 @@ VelodyneCloudSeparator::VelodyneCloudSeparator(const rclcpp::NodeOptions & optio
 {
   // Declare Parameters
   double update_rate_hz = this->declare_parameter("update_rate_hz", 20.0);
-  double sensor_height = this->declare_parameter("sensor_height", 2.0);
-  double radius_coef_close = this->declare_parameter("radius_coef_close", 1.0);
-  double radius_coef_far = this->declare_parameter("radius_coef_far", 1.0);
-  limiting_ratio_ = this->declare_parameter("limiting_ratio", 0.1);
-  gap_threshold_ = this->declare_parameter("gap_threshold", 0.1);
-  min_points_num_ = this->declare_parameter("min_points_num", 3);
+  double sensor_height = this->declare_parameter("sensor_height_m", 1.0);
+  double radius_coef_close = this->declare_parameter("radius_coef_close", 0.2);
+  double radius_coef_far = this->declare_parameter("radius_coef_far", 0.7);
+  float max_slope_deg = this->declare_parameter("max_slope_deg", 15.0);
+  limiting_ratio_ = tan(max_slope_deg * M_PI / 180.0);
+  gap_threshold_ = this->declare_parameter("gap_threshold_m", 0.1);
+  min_points_num_ = this->declare_parameter("min_points_per_cluster", 2);
 
   // Declare Subscriptions
   {
@@ -71,8 +72,7 @@ void VelodyneCloudSeparator::update()
 
   int points_size = pc_->points.size();
 
-  const double width_double = points_size * 1.8 / height_;
-  const int width = static_cast<int>(width_double);
+  const int width = static_cast<int>(points_size * 1.8 / height_);
 
   // Create index map
   std::vector<std::vector<int>> index_map(height_, std::vector<int>(width, -1));
@@ -81,14 +81,14 @@ void VelodyneCloudSeparator::update()
     float angle = atan2(point.y, point.x) * 180.0 / M_PI;
     if (angle < 0.0) angle += 360.0;
     int row = height_ - 1 - point.ring;
-    int col = width - 1 - static_cast<int>(width_double * angle / 360.0);
+    int col = width - 1 - static_cast<int>(static_cast<double>(width) * angle / 360.0);
     index_map[row][col] = i;
   }
 
   // Separate points
   pcl::PointCloud<pcl::PointXYZ>::Ptr ground_points(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr obstacle_points(new pcl::PointCloud<pcl::PointXYZ>);
-  for (int i = 0; i > width; i++) {
+  for (int i = 0; i < width; i++) {
     PointType point_types[height_] = {PointType::UNKNOWN};
     int point_indices[height_] = {0};
     int point_indices_size = 0;
@@ -97,15 +97,15 @@ void VelodyneCloudSeparator::update()
     double z_ref = 0.0;
     double r_ref = 0.0;
 
-    for (int j = 0; j < height_; j++) {
+    for (int j = height_ - 1; j >= 0; j--) {
       auto & point = pc_->points[index_map[j][i]];
-      if (index_map[j][i] == -1 && point_types[j] == PointType::UNKNOWN) {
+      if (index_map[j][i] > -1 && point_types[j] == PointType::UNKNOWN) {
         const float x0 = point.x;
         const float y0 = point.y;
         const float z0 = point.z;
         const float r0 = sqrt(x0 * x0 + y0 * y0);
         const float r_diff = r0 - r_ref;
-        const float z_diff = z0 - z_ref;
+        const float z_diff = fabs(z0 - z_ref);
         const float angle = z_diff / r_diff;
 
         if (
@@ -133,7 +133,7 @@ void VelodyneCloudSeparator::update()
       }
       if (j != 0) continue;
 
-      if (point_indices != 0) {
+      if (point_indices_size != 0) {
         for (int k = 0; k < point_indices_size; k++) {
           int index = index_map[point_indices[k]][i];
           if (point_indices_size > min_points_num_) {
@@ -220,3 +220,6 @@ bool VelodyneCloudSeparator::try_subscribe_pc()
   return true;
 }
 }  // namespace velodyne_cloud_separator
+
+#include "rclcpp_components/register_node_macro.hpp"
+RCLCPP_COMPONENTS_REGISTER_NODE(velodyne_cloud_separator::VelodyneCloudSeparator)
