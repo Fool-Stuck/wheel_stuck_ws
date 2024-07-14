@@ -54,6 +54,7 @@
     "pkgs",
     "rclcpp",
     "rosdep",
+    "rosdistro",
     "schematypens",
     "vcstool",
     "velodyne",
