@@ -1,7 +1,5 @@
 #include "dwa_planner/dwa_planner.hpp"
 
-#include <wheel_stuck_utils/math/math.hpp>
-
 #include <limits>
 
 namespace dwa_planner
@@ -185,10 +183,9 @@ DWAPlanner::Trajectory DWAPlanner::planning()
   Trajectory best_trajectory;
 
   for (int v = 0; v < velocity_resolution_; v++) {
-    double velocity = wheel_stuck_utils::math::lerp(
-      window.min_velocity, window.max_velocity, v * velocity_resolution_inv_);
+    double velocity = lerp(window.min_velocity, window.max_velocity, v * velocity_resolution_inv_);
     for (int a = 0; a < angular_velocity_resolution_; a++) {
-      double angular_velocity = wheel_stuck_utils::math::lerp(
+      double angular_velocity = lerp(
         window.min_angular_velocity, window.max_angular_velocity,
         a * angular_velocity_resolution_inv_);
 
