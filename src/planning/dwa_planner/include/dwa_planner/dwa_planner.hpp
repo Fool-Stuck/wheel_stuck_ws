@@ -9,7 +9,6 @@
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 
-#include <algorithm>
 #include <vector>
 
 namespace dwa_planner
@@ -72,14 +71,6 @@ private:
   Window generate_window(const Twist current_twist);
   double calculate_stage_cost(const State & state);
   double calculate_terminal_cost(const State & state);
-
-  inline static double lerp(const double a, const double b, double t)
-  {
-    t = std::max(0.0, std::min(1.0, t));
-    return a + t * (b - a);
-  }
-
-  rclcpp::TimerBase::SharedPtr update_timer_;
 
   OccupancyGridSubscription::SharedPtr map_sub_;
   OdometrySubscription::SharedPtr odom_sub_;
