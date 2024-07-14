@@ -43,9 +43,11 @@
   ],
   "words": [
     "buildtool",
+    "coef",
     "colcon",
     "costmap",
     "DCMAKE",
+    "Eigen",
     "GNUCXX",
     "odometry",
     "pkg",
@@ -54,7 +56,9 @@
     "rosdep",
     "schematypens",
     "vcstool",
+    "velodyne",
     "Wextra",
-    "Wpedantic"
+    "Wpedantic",
+    "XYZIR"
   ]
 }
