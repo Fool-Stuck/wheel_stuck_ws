@@ -59,11 +59,9 @@ private:
 
 public:
   explicit DWAPlanner(const rclcpp::NodeOptions & options);
-  void update();
-
-  rclcpp::TimerBase::SharedPtr update_timer_;
 
 private:
+  void update();
   bool subscribe_and_validate();
   bool try_subscribe_map();
   bool try_subscribe_odom();
@@ -73,6 +71,8 @@ private:
   Window generate_window(const Twist current_twist);
   double calculate_stage_cost(const State & state);
   double calculate_terminal_cost(const State & state);
+
+  rclcpp::TimerBase::SharedPtr update_timer_;
 
   OccupancyGridSubscription::SharedPtr map_sub_;
   OdometrySubscription::SharedPtr odom_sub_;
