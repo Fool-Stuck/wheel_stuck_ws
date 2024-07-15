@@ -15,10 +15,10 @@ Fool Stuck Robot
    sudo apt update
    ```
 
-2. Install VCS tool
+2. Install VCS tool and rosdep
 
    ```bash
-   sudo apt install -y python3-vcstool
+   sudo apt install -y python3-vcstool python3-colcon-common-extensions python3-rosdep
    ```
 
 3. Clone repos and cd into dir
