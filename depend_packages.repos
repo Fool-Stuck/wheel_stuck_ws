@@ -1,4 +1,8 @@
 repositories:
+  localization/direct_lidar_inertial_odometry:
+    type: git
+    url: https://github.com/Fool-Stuck/direct_lidar_inertial_odometry.git
+    version: feature/ros2
   driver/velodyne:
     type: git
     url: https://github.com/ros-drivers/velodyne.git
