@@ -37,8 +37,7 @@ Fool Stuck Robot
 5. Setup rosdep
 
    ```bash
-   sudo rosdep install
-   rosdep update
+   sudo rosdep init && rosdep update
    ```
 
 6. Install depend pkgs(binary)
