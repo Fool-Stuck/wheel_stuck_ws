@@ -2,29 +2,28 @@
 #define SIMPLE_INT_PUBLISHER__SIMPLE_INT_PUBLISHER_HPP_
 
 #include <rclcpp/rclcpp.hpp>
-#include <wheel_stuck_utils/ros/timer_driven_node.hpp>
+#include <wheel_stuck_utils/ros/function_timer.hpp>
 
 #include <std_msgs/msg/int32.hpp>
 
 namespace simple_int_publisher
 {
 
-using TimerDrivenNode = wheel_stuck_utils::ros::TimerDrivenNode;
-
 using Int32 = std_msgs::msg::Int32;
 
+using FunctionTimer = wheel_stuck_utils::ros::FunctionTimer;
 using Int32Publisher = rclcpp::Publisher<Int32>;
 
-class SimpleIntPublisher : public TimerDrivenNode
+class SimpleIntPublisher : public rclcpp::Node
 {
 public:
   explicit SimpleIntPublisher(const rclcpp::NodeOptions & options);
 
 protected:
-  void on_init() override;
-  void on_update() override;
+  void update();
 
 private:
+  FunctionTimer::SharedPtr update_timer_;
   Int32Publisher::SharedPtr pub_;
   int counter_;
 };

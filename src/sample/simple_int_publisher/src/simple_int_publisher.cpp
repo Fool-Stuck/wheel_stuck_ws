@@ -4,17 +4,23 @@ namespace simple_int_publisher
 {
 
 SimpleIntPublisher::SimpleIntPublisher(const rclcpp::NodeOptions & options)
-: TimerDrivenNode("simple_int_publisher", options, this->declare_parameter("update_rate_hz", 1.0))
+: Node("simple_int_publisher", options)
 {
-}
+  // Declare timer for update function
+  {
+    double update_rate_hz = this->declare_parameter("update_rate_hz", 1.0);
+    update_timer_ = FunctionTimer::create_function_timer(
+      this, update_rate_hz, std::bind(&SimpleIntPublisher::update, this));
+  }
 
-void SimpleIntPublisher::on_init()
-{
-  // pub_ = this->create_publisher<Int32>("~/output/int", 1);
+  // Declare Publisher
+  pub_ = this->create_publisher<Int32>("~/output/int", 1);
+
+  // Initialize counter
   counter_ = 0;
 }
 
-void SimpleIntPublisher::on_update()
+void SimpleIntPublisher::update()
 {
   Int32 msg;
   msg.data = counter_;
