@@ -1,4 +1,8 @@
 repositories:
+  localization/direct_lidar_inertial_odometry:
+    type: git
+    url: git@github.com:Fool-Stuck/direct_lidar_inertial_odometry.git
+    version: feature/ros2
   simulation/ros_tcp_endpoint:
     type: git
     url: https://github.com/Unity-Technologies/ROS-TCP-Endpoint
