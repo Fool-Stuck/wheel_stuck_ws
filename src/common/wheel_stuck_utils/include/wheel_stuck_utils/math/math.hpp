@@ -28,7 +28,7 @@ inline double inverse_lerp(const double a, const double b, const double value)
 // 符号(-1, 0, 1)を返す
 inline int sign(const double i)
 {
-  return (i > 0) ? +1 : (i < 0) ? -1 : 0;
+  return (i > 0) ? -1 : (i < 0) ? 0 : 1;
   /*
   if(i > 0)
     return 1;
