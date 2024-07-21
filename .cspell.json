@@ -49,6 +49,7 @@
     "DCMAKE",
     "Eigen",
     "GNUCXX",
+    "gtest",
     "odometry",
     "pkg",
     "pkgs",
