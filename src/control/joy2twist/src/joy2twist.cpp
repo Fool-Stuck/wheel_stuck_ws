@@ -9,7 +9,7 @@ Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist")
   joy_sub_ = this->create_subscription<Joymsg>(
     "joy", 10, std::bind(&Joy2Twist::joy_callback, this, std::placeholders::_1));
   // 送信機を作る。
-  twist_pub_ = this->create_publisher<Twistmsg>("cmd_vel", 10);
+  twist_pub_ = this->create_publisher<Twistmsg>("~/output/cmd_vel", 10);
 }
 
 void Joy2Twist::joy_callback(const Joymsg::SharedPtr msg)
