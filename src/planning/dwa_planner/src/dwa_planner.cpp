@@ -1,5 +1,7 @@
 #include "dwa_planner/dwa_planner.hpp"
 
+#include <wheel_stuck_utils/math/math.hpp>
+
 #include <limits>
 
 namespace dwa_planner
@@ -149,7 +151,7 @@ bool DWAPlanner::subscribe_and_validate()
 
 bool DWAPlanner::try_subscribe_map()
 {
-  auto map_msg = map_sub_->getData();
+  auto map_msg = map_sub_->get_data();
   if (!map_msg) return false;
   map_ = map_msg;
   return true;
@@ -157,7 +159,7 @@ bool DWAPlanner::try_subscribe_map()
 
 bool DWAPlanner::try_subscribe_odom()
 {
-  auto odom_msg = odom_sub_->getData();
+  auto odom_msg = odom_sub_->get_data();
   if (!odom_msg) return false;
   odom_ = odom_msg;
   return true;
@@ -165,7 +167,7 @@ bool DWAPlanner::try_subscribe_odom()
 
 bool DWAPlanner::try_subscribe_goal()
 {
-  auto goal_msg = goal_sub_->getData();
+  auto goal_msg = goal_sub_->get_data();
   if (!goal_msg) return false;
   goal_ = goal_msg;
   return true;
@@ -183,9 +185,10 @@ DWAPlanner::Trajectory DWAPlanner::planning()
   Trajectory best_trajectory;
 
   for (int v = 0; v < velocity_resolution_; v++) {
-    double velocity = lerp(window.min_velocity, window.max_velocity, v * velocity_resolution_inv_);
+    double velocity = wheel_stuck_utils::math::lerp(
+      window.min_velocity, window.max_velocity, v * velocity_resolution_inv_);
     for (int a = 0; a < angular_velocity_resolution_; a++) {
-      double angular_velocity = lerp(
+      double angular_velocity = wheel_stuck_utils::math::lerp(
         window.min_angular_velocity, window.max_angular_velocity,
         a * angular_velocity_resolution_inv_);
 

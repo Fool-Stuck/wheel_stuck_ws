@@ -43,18 +43,23 @@
   ],
   "words": [
     "buildtool",
+    "coef",
     "colcon",
     "costmap",
     "DCMAKE",
+    "Eigen",
     "GNUCXX",
     "odometry",
     "pkg",
     "pkgs",
     "rclcpp",
     "rosdep",
+    "rosdistro",
     "schematypens",
     "vcstool",
+    "velodyne",
     "Wextra",
-    "Wpedantic"
+    "Wpedantic",
+    "XYZIR"
   ]
 }

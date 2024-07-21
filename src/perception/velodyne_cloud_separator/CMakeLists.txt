@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(simple_int_subscriber)
+project(velodyne_cloud_separator)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
@@ -14,22 +14,13 @@ endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
-ament_auto_add_library(simple_int_subscriber SHARED
-  src/simple_int_subscriber.cpp
+ament_auto_add_library(velodyne_cloud_separator SHARED
+  src/velodyne_cloud_separator.cpp
 )
 
-rclcpp_components_register_node(simple_int_subscriber
-  PLUGIN "simple_int_subscriber::SimpleIntSubscriber"
-  EXECUTABLE simple_int_subscriber_node
-)
-
-ament_auto_add_library(polling_int_subscriber SHARED
-  src/polling_int_subscriber.cpp
-)
-
-rclcpp_components_register_node(polling_int_subscriber
-  PLUGIN "simple_int_subscriber::PollingIntSubscriber"
-  EXECUTABLE polling_int_subscriber_node
+rclcpp_components_register_node(velodyne_cloud_separator
+  PLUGIN "velodyne_cloud_separator::VelodyneCloudSeparator"
+  EXECUTABLE velodyne_cloud_separator_node
 )
 
 if(BUILD_TESTING)
