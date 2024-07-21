@@ -3,7 +3,7 @@
 namespace joy2twist
 {
 
-Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist")
+Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", options)
 {
   // 受信機を作る。型はjoyで受け取る。10個まで値が保持される。
   joy_sub_ = this->create_subscription<Joymsg>(
