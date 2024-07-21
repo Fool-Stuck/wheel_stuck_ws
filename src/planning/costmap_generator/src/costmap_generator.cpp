@@ -1,5 +1,7 @@
 #include "costmap_generator/costmap_generator.hpp"
 
+#include <pcl_conversions/pcl_conversions.h>
+
 namespace costmap_generator
 {
 
@@ -15,9 +17,13 @@ CostmapGenerator::CostmapGenerator(const rclcpp::NodeOptions & options)
 
 void CostmapGenerator::callback(const PointCloud2::SharedPtr msg)
 {
-  std::cout << "Received" << std::endl;
-}
+  pc_ = PointCloudXYZ::Ptr(new PointCloudXYZ);
+  pcl::fromROSMsg(*msg, *pc_);
 
+  // for (const auto & point : pc_->points)
+  // {
+  // }
+}
 }  // namespace costmap_generator
 
 #include "rclcpp_components/register_node_macro.hpp"
