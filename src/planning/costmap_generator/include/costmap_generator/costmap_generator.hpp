@@ -9,11 +9,15 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
+#include <string>
+
 namespace costmap_generator
 {
 
 using PointCloud2 = sensor_msgs::msg::PointCloud2;
 using PointCloud2Subscription = rclcpp::Subscription<PointCloud2>;
+using OccupancyGrid = nav_msgs::msg::OccupancyGrid;
+using OccupancyGridPublisher = rclcpp::Publisher<OccupancyGrid>;
 
 using PointXYZ = pcl::PointXYZ;
 using PointCloudXYZ = pcl::PointCloud<PointXYZ>;
@@ -25,9 +29,16 @@ public:
 
 private:
   PointCloud2Subscription::SharedPtr pc_sub_;
+  OccupancyGridPublisher::SharedPtr costmap_pub_;
+
   void callback(const PointCloud2::SharedPtr msg);
 
   PointCloudXYZ::Ptr pc_;
+
+  std::string costmap_frame_id;
+  double costmap_resolution;
+  int costmap_width;
+  int costmap_height;
 };
 
 }  // namespace costmap_generator

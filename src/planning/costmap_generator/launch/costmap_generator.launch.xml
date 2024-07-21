@@ -1,1 +1,7 @@
-<launch/>
+<launch>
+  <arg name="config_file" default="$(find-pkg-share costmap_generator)/config/costmap_generator.param.yaml"/>
+
+  <node pkg="costmap_generator" name="costmap_generator" exec="costmap_generator_node" output="screen">
+    <param from="$(var config_file)"/>
+  </node>
+</launch>

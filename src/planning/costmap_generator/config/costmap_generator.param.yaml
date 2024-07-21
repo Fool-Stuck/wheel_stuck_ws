@@ -1,0 +1,6 @@
+/**:
+  ros__parameters:
+    costmap_frame_id: "base_link"
+    costmap_resolution: 1.0 # m/cell
+    costmap_width: 10
+    costmap_height: 10
