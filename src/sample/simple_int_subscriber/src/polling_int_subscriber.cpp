@@ -30,7 +30,7 @@ PollingIntSubscriber::PollingIntSubscriber(const rclcpp::NodeOptions & options)
 
 void PollingIntSubscriber::update()
 {
-  const auto msg = sub_->getData();
+  const auto msg = sub_->get_data();
   if (msg) {
     std::cout << "Received: '" << msg->data << "'" << std::endl;
   } else {
