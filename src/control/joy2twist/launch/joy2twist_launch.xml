@@ -1,7 +1,9 @@
 <launch>
   <arg name="cmd_vel_topic" default="/turtle1/cmd_vel"/>
+  <arg name="joy_topic" default="/joy"/>
 
-  <node pkg="joy2twist" exec="joy2twist_node_exec" name="joy2twist" output="screen">
+  <node pkg="joy2twist" exec="joy2twist_node" name="joy2twist" output="screen">
     <remap from="~/output/cmd_vel" to="$(var cmd_vel_topic)"/>
+    <remap from="~/input/joy" to="$(var joy_topic)"/>
   </node>
 </launch>

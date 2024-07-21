@@ -28,7 +28,7 @@ ament_auto_add_library(joy2twist SHARED
 # joy2twistノードの登録
 rclcpp_components_register_node(joy2twist
   PLUGIN "joy2twist::Joy2Twist"
-  EXECUTABLE joy2twist_node_exec
+  EXECUTABLE joy2twist_node
 )
 
 if(BUILD_TESTING)
