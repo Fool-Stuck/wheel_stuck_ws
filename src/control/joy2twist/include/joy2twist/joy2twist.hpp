@@ -18,6 +18,8 @@ public:
 
 private:
   void joy_callback(const Joy::SharedPtr msg);
+  int linear_x_axis_;
+  int angular_z_axis_;
 
   rclcpp::Subscription<Joy>::SharedPtr joy_sub_;
   rclcpp::Publisher<Twist>::SharedPtr twist_pub_;
