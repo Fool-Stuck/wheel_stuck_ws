@@ -18,11 +18,10 @@ Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", op
 
 void Joy2Twist::joy_callback(const Joy::SharedPtr msg)
 {
-  auto twist = Twist();
-
   float linear_x = msg->axes[linear_x_axis_];    // 前後方向の入力
   float angular_z = msg->axes[angular_z_axis_];  // 左右方向の入力
 
+  auto twist = Twist();
   twist.linear.x = linear_x;
   twist.angular.z = angular_z;
 
