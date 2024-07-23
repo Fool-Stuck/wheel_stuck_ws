@@ -5,13 +5,9 @@ namespace joy2twist
 
 Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", options)
 {
-  // パラメータの宣言と初期値の設定
-  declare_parameter<int>("linear_x_axis", 1);
-  declare_parameter<int>("angular_z_axis", 0);
-
   // パラメータの取得
-  get_parameter("linear_x_axis", linear_x_axis_);
-  get_parameter("angular_z_axis", angular_z_axis_);
+  linear_x_axis_ = declare_parameter<int>("linear_x_axis", 1);
+  angular_z_axis_ = declare_parameter<int>("angular_z_axis", 0);
 
   // 受信機を作る。型はjoyで受け取る。10個まで値が保持される。
   joy_sub_ = this->create_subscription<Joy>(
