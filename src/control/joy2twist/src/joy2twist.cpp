@@ -23,8 +23,8 @@ void Joy2Twist::joy_callback(const Joy::SharedPtr msg)
 
   auto twist = TwistStamped();
   twist.header.stamp = this->now();
-  twist.twist.linear.x = linear_x;
-  twist.twist.angular.z = angular_z;
+  twist.twist.linear.x = static_cast<double>(linear_x);
+  twist.twist.angular.z = static_cast<double>(angular_z);
 
   twist_pub_->publish(twist);
 }
