@@ -13,7 +13,7 @@ Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", op
   joy_sub_ = this->create_subscription<Joy>(
     "~/input/joy", 10, std::bind(&Joy2Twist::joy_callback, this, std::placeholders::_1));
   // 送信機を作る。
-  twist_pub_ = this->create_publisher<Twist>("~/output/cmd_vel", 10);
+  twist_pub_ = this->create_publisher<TwistStamped>("~/output/cmd_vel", 10);
 }
 
 void Joy2Twist::joy_callback(const Joy::SharedPtr msg)
@@ -21,9 +21,10 @@ void Joy2Twist::joy_callback(const Joy::SharedPtr msg)
   float linear_x = msg->axes[linear_x_axis_];    // 前後方向の入力
   float angular_z = msg->axes[angular_z_axis_];  // 左右方向の入力
 
-  auto twist = Twist();
-  twist.linear.x = linear_x;
-  twist.angular.z = angular_z;
+  auto twist = TwistStamped();
+  twist.header.stamp = this->now();
+  twist.twist.linear.x = linear_x;
+  twist.twist.angular.z = angular_z;
 
   twist_pub_->publish(twist);
 }
