@@ -11,6 +11,9 @@ namespace joy2twist
 using Joy = sensor_msgs::msg::Joy;
 using Twist = geometry_msgs::msg::Twist;
 
+using JoySubscription = rclcpp::Subscription<Joy>;
+using TwistPublisher = rclcpp::Publisher<Twist>;
+
 class Joy2Twist : public rclcpp::Node
 {
 public:
@@ -21,8 +24,8 @@ private:
   int linear_x_axis_;
   int angular_z_axis_;
 
-  rclcpp::Subscription<Joy>::SharedPtr joy_sub_;
-  rclcpp::Publisher<Twist>::SharedPtr twist_pub_;
+  JoySubscription::SharedPtr joy_sub_;
+  TwistPublisher::SharedPtr twist_pub_;
 };
 
 }  // namespace joy2twist
