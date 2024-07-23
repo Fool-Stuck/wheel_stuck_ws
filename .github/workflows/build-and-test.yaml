@@ -28,7 +28,7 @@ jobs:
           cd wheel_stuck_ws &&
           rosdep update &&
           apt-get update &&
-          vcs import src < depend_packages.repos &&
+          vcs import src < depend_packages_ci.repos &&
           rosdep install --from-path . -i -y --rosdistro ${{ matrix.rosdistro }}
 
       - name: Install diagnostic-updater
