@@ -43,6 +43,7 @@ repos:
     rev: v0.10.0
     hooks:
       - id: flake8-ros
+        exclude: ^\.github/merge_compile_commands\.py$
       - id: prettier-xacro
       - id: prettier-launch-xml
       - id: prettier-package-xml
