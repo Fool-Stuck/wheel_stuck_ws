@@ -1,4 +1,4 @@
-# wheel-stuck-ros-pkgs
+# wheel_stuck_ws
 
 Fool Stuck Robot
 
@@ -24,7 +24,7 @@ Fool Stuck Robot
 3. Clone repos and cd into dir
 
    ```bash
-   git clone https://github.com/Fool-Stuck/wheel-stuck-ros-pkgs.git && cd wheel-stuck-ros-pkgs
+   git clone https://github.com/Fool-Stuck/wheel_stuck_ws.git && cd wheel_stuck_ws
    ```
 
 4. Import depend pkgs(source)
