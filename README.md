@@ -53,7 +53,4 @@ Fool Stuck Robot
 
 ## 2. Run
 
-## CodeOwner
-@RyodoTanaka
-
 ## LICENSE
