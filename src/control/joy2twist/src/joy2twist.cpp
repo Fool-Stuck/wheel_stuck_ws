@@ -1,13 +1,26 @@
 #include <joy2twist/joy2twist.hpp>
 
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
+
 namespace joy2twist
 {
 
 Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", options)
 {
+  // 軸名と数値のマッピング
+  std::unordered_map<std::string, int> axis_map = {
+    {"LEFT_STICK_X", 1},  // 左スティックのX軸
+    {"LEFT_STICK_Y", 0}   // 左スティックのY軸
+  };
   // パラメータの取得
-  linear_x_axis_ = declare_parameter<int>("linear_x_axis", 1);
-  angular_z_axis_ = declare_parameter<int>("angular_z_axis", 0);
+  std::string linear_x_axis_str = declare_parameter<std::string>("linear_x_axis", "LEFT_STICK_Y");
+  std::string angular_z_axis_str = declare_parameter<std::string>("angular_z_axis", "LEFT_STICK_X");
+
+  // 軸名を対応する数値に変換
+  linear_x_axis_ = axis_map.at(linear_x_axis_str);
+  angular_z_axis_ = axis_map.at(angular_z_axis_str);
 
   // 受信機を作る。型はjoyで受け取る。10個まで値が保持される。
   joy_sub_ = this->create_subscription<Joy>(
