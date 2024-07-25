@@ -2,18 +2,11 @@
 
 #include <stdexcept>
 #include <string>
-#include <unordered_map>
 
 namespace joy2twist
 {
-
 Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", options)
 {
-  // 軸名と数値のマッピング
-  std::unordered_map<std::string, int> axis_map = {
-    {"LEFT_STICK_X", 1},  // 左スティックのX軸
-    {"LEFT_STICK_Y", 0}   // 左スティックのY軸
-  };
   // パラメータの取得
   std::string linear_x_axis_str = declare_parameter<std::string>("linear_x_axis", "LEFT_STICK_Y");
   std::string angular_z_axis_str = declare_parameter<std::string>("angular_z_axis", "LEFT_STICK_X");
@@ -40,7 +33,7 @@ void Joy2Twist::joy_callback(const Joy::SharedPtr msg)
   twist.twist.angular.z = static_cast<double>(angular_z);
 
   twist_pub_->publish(twist);
-}
+};
 
 }  // namespace joy2twist
 #include "rclcpp_components/register_node_macro.hpp"
