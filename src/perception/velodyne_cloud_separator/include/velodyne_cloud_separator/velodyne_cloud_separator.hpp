@@ -1,7 +1,7 @@
 #ifndef VELODYNE_CLOUD_SEPARATOR__VELODYNE_CLOUD_SEPARATOR_HPP_
 #define VELODYNE_CLOUD_SEPARATOR__VELODYNE_CLOUD_SEPARATOR_HPP_
 
-#include "point_types.hpp"
+#include "pcl/point_types.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 #include <wheel_stuck_utils/ros/no_callback_subscription.hpp>
@@ -17,6 +17,7 @@
 namespace velodyne_cloud_separator
 {
 
+using PointXYZIR = pcl::PointXYZIR;
 using PointCloud2 = sensor_msgs::msg::PointCloud2;
 
 using PointCloud2Subscription = wheel_stuck_utils::ros::NoCallbackSubscription<PointCloud2>;
