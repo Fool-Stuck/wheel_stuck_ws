@@ -6,6 +6,9 @@
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <sensor_msgs/msg/joy.hpp>
 
+#include <string>
+#include <unordered_map>
+
 namespace joy2twist
 {
 using Joy = sensor_msgs::msg::Joy;
@@ -26,6 +29,11 @@ private:
 
   JoySubscription::SharedPtr joy_sub_;
   TwistStampedPublisher::SharedPtr twist_pub_;
+};
+
+const std::unordered_map<std::string, int> axis_map = {
+  {"LEFT_STICK_X", 0},  // 左スティックのX軸
+  {"LEFT_STICK_Y", 1}   // 左スティックのY軸
 };
 
 }  // namespace joy2twist
