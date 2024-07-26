@@ -1,8 +1,5 @@
 #include <joy2twist/joy2twist.hpp>
 
-#include <stdexcept>
-#include <string>
-
 namespace joy2twist
 {
 Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", options)
@@ -33,7 +30,7 @@ void Joy2Twist::joy_callback(const Joy::SharedPtr msg)
   twist.twist.angular.z = static_cast<double>(angular_z);
 
   twist_pub_->publish(twist);
-};
+}
 
 }  // namespace joy2twist
 #include "rclcpp_components/register_node_macro.hpp"
