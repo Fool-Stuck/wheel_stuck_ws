@@ -1,5 +1,5 @@
-#ifndef POINT_TYPES_HPP_
-#define POINT_TYPES_HPP_
+#ifndef PCL__POINT_TYPES_HPP_
+#define PCL__POINT_TYPES_HPP_
 
 #include <pcl/point_types.h>
 
@@ -15,4 +15,4 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(
   PointXYZIR,
   (float, x, x)(float, y, y)(float, z, z)(float, intensity, intensity)(uint16_t, ring, ring))
 
-#endif  // POINT_TYPES_HPP_
+#endif  // PCL__POINT_TYPES_HPP_

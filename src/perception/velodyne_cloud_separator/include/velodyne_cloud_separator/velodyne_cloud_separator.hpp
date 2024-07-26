@@ -1,7 +1,7 @@
 #ifndef VELODYNE_CLOUD_SEPARATOR__VELODYNE_CLOUD_SEPARATOR_HPP_
 #define VELODYNE_CLOUD_SEPARATOR__VELODYNE_CLOUD_SEPARATOR_HPP_
 
-#include "point_types.hpp"
+#include "pcl/point_types.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 #include <wheel_stuck_utils/ros/no_callback_subscription.hpp>
