@@ -38,7 +38,7 @@ jobs:
         id: build_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
-          colcon build
+          colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
         continue-on-error: true
 
       - name: build_test command success
@@ -64,3 +64,15 @@ jobs:
       - name: run_test command failure
         if: steps.run_test.outcome == 'failure'
         run: echo "result - failure" && exit 1
+
+      - name: Install clang-tidy
+        run: apt-get install clang-tidy -y
+
+      - name: Merge compile_commands.json
+        run: |
+          python3 .github/merge_compile_commands.py
+
+      - name: Run clang-tidy
+        run: |
+          clang-tidy -p compile_commands.json find src/ -name "*.cpp"
+        continue-on-error: true
