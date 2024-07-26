@@ -17,6 +17,7 @@
 namespace velodyne_cloud_separator
 {
 
+using PointXYZIR = pcl::PointXYZIR;
 using PointCloud2 = sensor_msgs::msg::PointCloud2;
 
 using PointCloud2Subscription = wheel_stuck_utils::ros::NoCallbackSubscription<PointCloud2>;
