@@ -57,6 +57,7 @@
     "rclcpp",
     "rosdep",
     "rosdistro",
+    "rosidl",
     "schematypens",
     "vcstool",
     "velodyne",
