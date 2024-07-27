@@ -33,10 +33,10 @@ jobs:
       - name: Check for changed packages
         id: changed-packages
         run: |
-          echo "Before Commit: ${{ github.event.before }}"
-          echo "After Commit: ${{ github.sha }}"
+          echo "Base: ${{ github.event.pull_request.base.sha }}"
+          echo "Head: ${{ github.sha }}"
 
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
 
           CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E '^(src/[^/]+(/[^/]+)*)' | while read -r file; do
             dir=$(dirname "$file")
