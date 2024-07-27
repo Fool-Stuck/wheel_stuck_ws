@@ -87,7 +87,6 @@ jobs:
             echo "Build failed"
             exit 1
           fi
-        continue-on-error: true
 
       - name: Run tests
         if: steps.changed-files.outputs.packages != ''
@@ -103,4 +102,3 @@ jobs:
             echo "Test failed"
             exit 1
           fi
-        continue-on-error: true
