@@ -23,6 +23,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Git Safe Directory
+        run: |
+          git config --global --add safe.directory /__w/wheel_stuck_ws/wheel_stuck_ws
+
       - name: Install dependencies
         run: |
           rosdep update &&
