@@ -1,1 +1,5 @@
 repositories:
+  simulation/ros_tcp_endpoint:
+    type: git
+    url: https://github.com/Unity-Technologies/ROS-TCP-Endpoint
+    version: ROS2v0.7.0
