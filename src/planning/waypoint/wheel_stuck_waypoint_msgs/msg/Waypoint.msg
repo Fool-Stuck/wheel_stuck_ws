@@ -1,0 +1,3 @@
+int64 index
+geometry_msgs/PoseStamped pose
+wheel_stuck_waypoint_msgs/WaypointAttribute[] attributes
