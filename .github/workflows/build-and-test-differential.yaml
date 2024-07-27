@@ -40,7 +40,6 @@ jobs:
           echo "Base: ${{ github.event.pull_request.base.sha }}"
           echo "Head: ${{ github.sha }}"
 
-          git fetch --unshallow
           CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
 
           CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E '^(src/[^/]+(/[^/]+)*)' | while read -r file; do
