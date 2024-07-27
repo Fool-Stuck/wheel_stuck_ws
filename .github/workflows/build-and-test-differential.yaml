@@ -35,7 +35,7 @@ jobs:
 
           CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
 
-          CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E '^(src/[^/]+(/[^/]+)*)' | while read -r file; do
+          CHANGED_PACKAGE_DIRS=$(echo "$CHANGED_FILES" | grep -E '^(src/[^/]+(/[^/]+)*)' | while read -r file; do
             dir=$(dirname "$file")
             while [ "$dir" != "." ]; do
               if [ -f "$dir/package.xml" ]; then
@@ -45,6 +45,8 @@ jobs:
               dir=$(dirname "$dir")
             done
           done | sort -u)
+
+          CHANGED_PACKAGES=$(echo "$CHANGED_DIRS" | sed 's|src/||' | sed 's|/[^/]*$||' | sort -u)
 
           if [ -z "$CHANGED_PACKAGES" ]; then
             echo "No changed packages found."
