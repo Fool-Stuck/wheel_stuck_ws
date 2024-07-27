@@ -82,6 +82,7 @@ jobs:
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
           colcon build --packages-up-to ${{ steps.changed-files.outputs.packages }}
+          exit_code=$?
 
           if [ "$exit_code" -eq 0 ]; then
             echo "Build succeeded"
@@ -97,6 +98,7 @@ jobs:
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
           colcon test &&
           colcon test-result
+          exit_code=$?
 
           if [ "$exit_code" -eq 0 ]; then
             echo "Test succeeded"
