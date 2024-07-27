@@ -1,0 +1,7 @@
+<launch>
+  <arg name="topic" default="/sample/int"/>
+
+  <node pkg="simple_int_subscriber" name="simple_int_subscriber" exec="simple_int_subscriber_node" output="screen">
+    <remap from="~/input/int" to="$(var topic)"/>
+  </node>
+</launch>

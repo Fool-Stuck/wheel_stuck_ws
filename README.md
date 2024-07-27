@@ -1,4 +1,4 @@
-# wheel-stuck-ros-pkgs
+# wheel_stuck_ws
 
 Fool Stuck Robot
 
@@ -15,16 +15,16 @@ Fool Stuck Robot
    sudo apt update
    ```
 
-2. Install VCS tool
+2. Install VCS tool and rosdep
 
    ```bash
-   sudo apt install -y python3-vcstool
+   sudo apt install -y python3-vcstool python3-colcon-common-extensions python3-rosdep
    ```
 
 3. Clone repos and cd into dir
 
    ```bash
-   git clone https://github.com/Fool-Stuck/wheel-stuck-ros-pkgs.git && cd wheel-stuck-ros-pkgs
+   git clone https://github.com/Fool-Stuck/wheel_stuck_ws.git && cd wheel_stuck_ws
    ```
 
 4. Import depend pkgs(source)
@@ -33,13 +33,19 @@ Fool Stuck Robot
    vcs import src < depend_packages.repos --recursive
    ```
 
-5. Install depend pkgs(binary)
+5. Setup rosdep
+
+   ```bash
+   sudo rosdep init && rosdep update
+   ```
+
+6. Install depend pkgs(binary)
 
    ```bash
    rosdep install -i -y --from-paths src --ignore-src
    ```
 
-6. Build
+7. Build
 
    ```bash
    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release

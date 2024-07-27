@@ -1,0 +1,14 @@
+<launch>
+  <arg name="points_topic" default="/velodyne_points"/>
+  <arg name="ground_points_topic" default="/velodyne_points/ground"/>
+  <arg name="obstacle_points_topic" default="/velodyne_points/obstacle"/>
+
+  <arg name="config_file" default="$(find-pkg-share velodyne_cloud_separator)/config/velodyne_cloud_separator.param.yaml"/>
+
+  <node pkg="velodyne_cloud_separator" name="velodyne_cloud_separator" exec="velodyne_cloud_separator_node" output="screen">
+    <remap from="~/input/points" to="$(var points_topic)"/>
+    <remap from="~/output/ground_points" to="$(var ground_points_topic)"/>
+    <remap from="~/output/obstacle_points" to="$(var obstacle_points_topic)"/>
+    <param from="$(var config_file)"/>
+  </node>
+</launch>

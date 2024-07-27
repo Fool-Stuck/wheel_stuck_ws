@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
-project(wheel_stuck_utils)
+project(velodyne_cloud_separator)
 
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 14)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
@@ -14,13 +14,21 @@ endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
+ament_auto_add_library(velodyne_cloud_separator SHARED
+  src/velodyne_cloud_separator.cpp
+)
+
+rclcpp_components_register_node(velodyne_cloud_separator
+  PLUGIN "velodyne_cloud_separator::VelodyneCloudSeparator"
+  EXECUTABLE velodyne_cloud_separator_node
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
-
-  ament_auto_add_gtest(test_wheel_stuck_utils test/test_wheel_stuck_utils.cpp)
-  file(GLOB TEST_SOURCES "test/**/*.cpp")
-  target_sources(test_wheel_stuck_utils PRIVATE ${TEST_SOURCES})
 endif()
 
-ament_auto_package()
+ament_auto_package(INSTALL_TO_SHARE
+  config
+  launch
+)

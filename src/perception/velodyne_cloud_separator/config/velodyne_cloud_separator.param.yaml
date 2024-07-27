@@ -1,0 +1,9 @@
+/**:
+  ros__parameters:
+    update_rate_hz: 20.0
+    sensor_height_m: 0.68
+    radius_coef_close: 0.2
+    radius_coef_far: 0.7
+    max_slope_deg: 10.0
+    gap_threshold_m: 0.2
+    min_points_per_cluster: 2
