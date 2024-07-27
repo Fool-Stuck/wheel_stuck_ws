@@ -56,42 +56,42 @@ jobs:
           if [ -z "$CHANGED_PACKAGES" ]; then
             echo "No changed packages found."
             echo "::set-output name=packages::"
-            exit 0
           else
             echo "Changed packages: $CHANGED_PACKAGES"
             echo "::set-output name=packages::$CHANGED_PACKAGES"
           fi
 
       - name: Install diagnostic-updater
+        if: steps.changed-packages.outputs.packages != ''
         run: apt-get install ros-${{ matrix.rosdistro }}-diagnostic-updater
 
       - name: Build tests
+        if: steps.changed-packages.outputs.packages != ''
         id: build_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
           colcon build --packages-select ${{ steps.changed-packages.outputs.packages }}
+
+          if [ "$exit_code" -eq 0 ]; then
+            echo "Build succeeded"
+          else
+            echo "Build failed"
+            exit 1
+          fi
         continue-on-error: true
 
-      - name: build_test command success
-        if: steps.build_test.outcome == 'success'
-        run: echo "result - success"
-
-      - name: build_test command failure
-        if: steps.build_test.outcome == 'failure'
-        run: echo "result - failure" && exit 1
-
       - name: Run tests
+        if: steps.changed-packages.outputs.packages != ''
         id: run_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
           colcon test &&
           colcon test-result
+
+          if [ "$exit_code" -eq 0 ]; then
+            echo "Test succeeded"
+          else
+            echo "Test failed"
+            exit 1
+          fi
         continue-on-error: true
-
-      - name: run_test command success
-        if: steps.run_test.outcome == 'success'
-        run: echo "result - success"
-
-      - name: run_test command failure
-        if: steps.run_test.outcome == 'failure'
-        run: echo "result - failure" && exit 1
