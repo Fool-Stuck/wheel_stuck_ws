@@ -96,7 +96,7 @@ jobs:
         id: run_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
-          colcon test &&
+          colcon test --packages-select ${{ steps.changed-files.outputs.packages }} &&
           colcon test-result
           exit_code=$?
 
