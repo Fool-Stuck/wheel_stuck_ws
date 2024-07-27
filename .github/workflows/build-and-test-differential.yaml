@@ -46,7 +46,7 @@ jobs:
             done
           done | sort -u)
 
-          CHANGED_PACKAGES=$(echo "$CHANGED_PACKAGE_DIRS" | sed 's|src/||' | sed 's|/[^/]*$||' | sort -u)
+          CHANGED_PACKAGES=$(echo "$CHANGED_PACKAGE_DIRS" | sed 's|^src/||' | sed 's|/.*$||' | sort -u)
 
           if [ -z "$CHANGED_PACKAGES" ]; then
             echo "No changed packages found."
