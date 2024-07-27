@@ -27,15 +27,8 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/wheel_stuck_ws/wheel_stuck_ws
 
-      - name: Install dependencies
-        run: |
-          rosdep update &&
-          apt-get update &&
-          vcs import src < depend_packages_ci.repos &&
-          rosdep install --from-path . -i -y --rosdistro ${{ matrix.rosdistro }}
-
-      - name: Check for changed packages
-        id: changed-packages
+      - name: Check for changed files
+        id: changed-files
         run: |
           echo "Base: ${{ github.event.pull_request.base.sha }}"
           echo "Head: ${{ github.sha }}"
@@ -61,16 +54,32 @@ jobs:
             echo "::set-output name=packages::$CHANGED_PACKAGES"
           fi
 
+          if [ $(echo "$CHANGED_FILES" | grep -c "depend_packages_ci.repos") -eq 1 ]; then
+            echo "depend_packages_ci.repos is changed"
+            echo "::set-output name=repos_file_changed::true"
+          else
+            echo "depend_packages_ci.repos is not changed"
+            echo "::set-output name=repos_file_changed::false"
+          fi
+
+      - name: Install dependencies
+        if: steps.changed-files.outputs.repos_file_changed == 'true' || steps.changed-files.outputs.packages != ''
+        run: |
+          rosdep update &&
+          apt-get update &&
+          vcs import src < depend_packages_ci.repos &&
+          rosdep install --from-path . -i -y --rosdistro ${{ matrix.rosdistro }}
+
       - name: Install diagnostic-updater
-        if: steps.changed-packages.outputs.packages != ''
+        if: steps.changed-files.outputs.packages != ''
         run: apt-get install ros-${{ matrix.rosdistro }}-diagnostic-updater
 
       - name: Build tests
-        if: steps.changed-packages.outputs.packages != ''
+        if: steps.changed-files.outputs.packages != ''
         id: build_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
-          colcon build --packages-select ${{ steps.changed-packages.outputs.packages }}
+          colcon build --packages-select ${{ steps.changed-files.outputs.packages }}
 
           if [ "$exit_code" -eq 0 ]; then
             echo "Build succeeded"
@@ -81,7 +90,7 @@ jobs:
         continue-on-error: true
 
       - name: Run tests
-        if: steps.changed-packages.outputs.packages != ''
+        if: steps.changed-files.outputs.packages != ''
         id: run_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
