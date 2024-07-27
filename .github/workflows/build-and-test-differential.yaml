@@ -79,7 +79,7 @@ jobs:
         id: build_test
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
-          colcon build --packages-select ${{ steps.changed-files.outputs.packages }}
+          colcon build --packages-up-to ${{ steps.changed-files.outputs.packages }}
 
           if [ "$exit_code" -eq 0 ]; then
             echo "Build succeeded"
@@ -87,7 +87,6 @@ jobs:
             echo "Build failed"
             exit 1
           fi
-        continue-on-error: true
 
       - name: Run tests
         if: steps.changed-files.outputs.packages != ''
@@ -103,4 +102,3 @@ jobs:
             echo "Test failed"
             exit 1
           fi
-        continue-on-error: true
