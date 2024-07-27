@@ -21,11 +21,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          path: wheel_stuck_ws
+          fetch-depth: 0
 
       - name: Install dependencies
         run: |
-          cd wheel_stuck_ws &&
           rosdep update &&
           apt-get update &&
           vcs import src < depend_packages_ci.repos &&
