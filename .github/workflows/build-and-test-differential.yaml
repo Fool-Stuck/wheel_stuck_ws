@@ -1,0 +1,91 @@
+name: build-and-test-differential
+
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  build_and_test:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+        rosdistro:
+          - humble
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: ros:${{ matrix.rosdistro }}-ros-base
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          path: wheel_stuck_ws
+
+      - name: Install dependencies
+        run: |
+          cd wheel_stuck_ws &&
+          rosdep update &&
+          apt-get update &&
+          vcs import src < depend_packages_ci.repos &&
+          rosdep install --from-path . -i -y --rosdistro ${{ matrix.rosdistro }}
+
+      - name: Check for changed packages
+        id: changed-packages
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+
+          CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E '^(src/[^/]+(/[^/]+)*)' | while read -r file; do
+            dir=$(dirname "$file")
+            while [ "$dir" != "." ]; do
+              if [ -f "$dir/package.xml" ]; then
+                echo "$dir"
+                break
+              fi
+              dir=$(dirname "$dir")
+            done
+          done | sort -u)
+
+          if [ -z "$CHANGED_PACKAGES" ]; then
+            echo "No changed packages found."
+            echo "::set-output name=packages::"
+            exit 0
+          else
+            echo "Changed packages: $CHANGED_PACKAGES"
+            echo "::set-output name=packages::$CHANGED_PACKAGES"
+          fi
+
+      - name: Install diagnostic-updater
+        run: apt-get install ros-${{ matrix.rosdistro }}-diagnostic-updater
+
+      - name: Build tests
+        id: build_test
+        run: |
+          . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
+          colcon build --packages-select ${{ steps.changed-packages.outputs.packages }}
+        continue-on-error: true
+
+      - name: build_test command success
+        if: steps.build_test.outcome == 'success'
+        run: echo "result - success"
+
+      - name: build_test command failure
+        if: steps.build_test.outcome == 'failure'
+        run: echo "result - failure" && exit 1
+
+      - name: Run tests
+        id: run_test
+        run: |
+          . /opt/ros/${{ matrix.rosdistro }}/setup.sh &&
+          colcon test &&
+          colcon test-result
+        continue-on-error: true
+
+      - name: run_test command success
+        if: steps.run_test.outcome == 'success'
+        run: echo "result - success"
+
+      - name: run_test command failure
+        if: steps.run_test.outcome == 'failure'
+        run: echo "result - failure" && exit 1
