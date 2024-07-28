@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef WHEEL_STUCK_UTILS__ROS__FUNCTION_TIMER_HPP_
-#define WHEEL_STUCK_UTILS__ROS__FUNCTION_TIMER_HPP_
+#ifndef WHEEL_STUCK_COMMON_UTILS__ROS__FUNCTION_TIMER_HPP_
+#define WHEEL_STUCK_COMMON_UTILS__ROS__FUNCTION_TIMER_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -53,4 +53,4 @@ public:
 
 }  // namespace wheel_stuck_utils::ros
 
-#endif  // WHEEL_STUCK_UTILS__ROS__FUNCTION_TIMER_HPP_
+#endif  // WHEEL_STUCK_COMMON_UTILS__ROS__FUNCTION_TIMER_HPP_
