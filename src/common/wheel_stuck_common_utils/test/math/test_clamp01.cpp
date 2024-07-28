@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "wheel_stuck_utils/math/math.hpp"
+#include "wheel_stuck_common_utils/math/math.hpp"
 
 #include <gtest/gtest.h>
 
-TEST(min, min)
+TEST(clamp01, clamp01)
 {
-  using wheel_stuck_utils::math::min;
+  using wheel_stuck_common_utils::math::clamp01;
 
-  EXPECT_EQ(min(5), 5);
-  EXPECT_EQ(min(5, 2, 8, -1), -1);
-  EXPECT_DOUBLE_EQ(min(2.4, 5.6, 0.1), 0.1);
+  EXPECT_DOUBLE_EQ(clamp01(0.5), 0.5);
+  EXPECT_DOUBLE_EQ(clamp01(1.5), 1.0);
+  EXPECT_DOUBLE_EQ(clamp01(-0.5), 0.0);
 }

@@ -16,7 +16,7 @@
 #define SIMPLE_INT_SUBSCRIBER__POLLING_INT_SUBSCRIBER_HPP_
 
 #include <rclcpp/rclcpp.hpp>
-#include <wheel_stuck_utils/ros/no_callback_subscription.hpp>
+#include <wheel_stuck_common_utils/ros/no_callback_subscription.hpp>
 
 #include <std_msgs/msg/int32.hpp>
 
@@ -25,7 +25,7 @@ namespace simple_int_subscriber
 
 using Int32 = std_msgs::msg::Int32;
 
-using Int32Subscription = wheel_stuck_utils::ros::NoCallbackSubscription<Int32>;
+using Int32Subscription = wheel_stuck_common_utils::ros::NoCallbackSubscription<Int32>;
 
 class PollingIntSubscriber : public rclcpp::Node
 {

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef WHEEL_STUCK_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_
-#define WHEEL_STUCK_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_
+#ifndef WHEEL_STUCK_COMMON_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_
+#define WHEEL_STUCK_COMMON_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 
 #include <memory>
 #include <string>
 
-namespace wheel_stuck_utils::ros
+namespace wheel_stuck_common_utils::ros
 {
 
 template <typename TMessage>
@@ -60,6 +60,6 @@ public:
   }
 };
 
-}  // namespace wheel_stuck_utils::ros
+}  // namespace wheel_stuck_common_utils::ros
 
-#endif  // WHEEL_STUCK_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_
+#endif  // WHEEL_STUCK_COMMON_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_

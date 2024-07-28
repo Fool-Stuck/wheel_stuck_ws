@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "wheel_stuck_utils/math/math.hpp"
+#include "wheel_stuck_common_utils/math/math.hpp"
 
 #include <gtest/gtest.h>
 
-TEST(clamp01, clamp01)
+TEST(inverse_lerp, inverse_lerp)
 {
-  using wheel_stuck_utils::math::clamp01;
+  using wheel_stuck_common_utils::math::inverse_lerp;
 
-  EXPECT_DOUBLE_EQ(clamp01(0.5), 0.5);
-  EXPECT_DOUBLE_EQ(clamp01(1.5), 1.0);
-  EXPECT_DOUBLE_EQ(clamp01(-0.5), 0.0);
+  EXPECT_DOUBLE_EQ(inverse_lerp(0.0, 10.0, 5), 0.5);
+  EXPECT_DOUBLE_EQ(inverse_lerp(0.0, 10.0, 15.0), 1.0);
+  EXPECT_DOUBLE_EQ(inverse_lerp(0.0, 10.0, -0.5), 0.0);
+  EXPECT_DOUBLE_EQ(inverse_lerp(10.0, 10.0, 10.0), 0.0);  // a == b のとき
 }
