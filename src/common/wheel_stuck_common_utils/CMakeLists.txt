@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(wheel_stuck_utils)
+project(wheel_stuck_common_utils)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -18,9 +18,9 @@ if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
 
-  ament_auto_add_gtest(test_wheel_stuck_utils test/test_wheel_stuck_utils.cpp)
+  ament_auto_add_gtest(test_wheel_stuck_common_utils test/test_wheel_stuck_common_utils.cpp)
   file(GLOB TEST_SOURCES "test/**/*.cpp")
-  target_sources(test_wheel_stuck_utils PRIVATE ${TEST_SOURCES})
+  target_sources(test_wheel_stuck_common_utils PRIVATE ${TEST_SOURCES})
 endif()
 
 ament_auto_package()
