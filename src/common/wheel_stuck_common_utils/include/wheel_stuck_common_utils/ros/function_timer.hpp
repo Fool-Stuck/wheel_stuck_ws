@@ -20,7 +20,7 @@
 #include <memory>
 #include <utility>
 
-namespace wheel_stuck_utils::ros
+namespace wheel_stuck_common_utils::ros
 {
 
 class FunctionTimer
@@ -51,6 +51,6 @@ public:
   }
 };
 
-}  // namespace wheel_stuck_utils::ros
+}  // namespace wheel_stuck_common_utils::ros
 
 #endif  // WHEEL_STUCK_COMMON_UTILS__ROS__FUNCTION_TIMER_HPP_

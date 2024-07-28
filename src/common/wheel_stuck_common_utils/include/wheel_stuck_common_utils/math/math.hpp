@@ -17,7 +17,7 @@
 
 #include <algorithm>
 
-namespace wheel_stuck_utils::math
+namespace wheel_stuck_common_utils::math
 {
 inline double clamp01(const double value)
 {
@@ -79,6 +79,6 @@ inline T max(T b, Args... args)
   return std::max(b, max(args...));
 }
 
-}  // namespace wheel_stuck_utils::math
+}  // namespace wheel_stuck_common_utils::math
 
 #endif  // WHEEL_STUCK_COMMON_UTILS__MATH__MATH_HPP_

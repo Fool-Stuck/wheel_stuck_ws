@@ -20,7 +20,7 @@
 #include <memory>
 #include <string>
 
-namespace wheel_stuck_utils::ros
+namespace wheel_stuck_common_utils::ros
 {
 
 template <typename TMessage>
@@ -60,6 +60,6 @@ public:
   }
 };
 
-}  // namespace wheel_stuck_utils::ros
+}  // namespace wheel_stuck_common_utils::ros
 
 #endif  // WHEEL_STUCK_COMMON_UTILS__ROS__NO_CALLBACK_SUBSCRIPTION_HPP_
