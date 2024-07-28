@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "wheel_stuck_utils/math/math.hpp"
+#include "wheel_stuck_common_utils/math/math.hpp"
 
 #include <gtest/gtest.h>
 
 TEST(min, min)
 {
-  using wheel_stuck_utils::math::min;
+  using wheel_stuck_common_utils::math::min;
 
   EXPECT_EQ(min(5), 5);
   EXPECT_EQ(min(5, 2, 8, -1), -1);
