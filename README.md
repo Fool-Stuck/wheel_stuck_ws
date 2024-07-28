@@ -1,3 +1,7 @@
+[![build-and-test](https://github.com/Fool-Stuck/wheel_stuck_ws/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/Fool-Stuck/wheel_stuck_ws/actions/workflows/build-and-test.yaml)
+[![pre-commit](https://github.com/Fool-Stuck/wheel_stuck_ws/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/Fool-Stuck/wheel_stuck_ws/actions/workflows/pre-commit.yaml)
+[![spell-check](https://github.com/Fool-Stuck/wheel_stuck_ws/actions/workflows/spell-check.yaml/badge.svg)](https://github.com/Fool-Stuck/wheel_stuck_ws/actions/workflows/spell-check.yaml)
+
 # wheel_stuck_ws
 
 Fool Stuck Robot
