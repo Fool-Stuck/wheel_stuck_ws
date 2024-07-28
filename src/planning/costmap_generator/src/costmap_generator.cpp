@@ -31,10 +31,6 @@ void CostmapGenerator::callback(const PointCloud2::SharedPtr msg)
   pc_ = PointCloudXYZ::Ptr(new PointCloudXYZ);
   pcl::fromROSMsg(*msg, *pc_);
 
-  // for (const auto & point : pc_->points)
-  // {
-  // }
-
   OccupancyGrid costmap;
 
   costmap.header.stamp = this->now();
@@ -53,6 +49,14 @@ void CostmapGenerator::callback(const PointCloud2::SharedPtr msg)
   costmap.info.origin.orientation.w = 1.0;
 
   costmap.data.resize(costmap_width * costmap_height);
+
+  int index;
+  for (const auto & point : pc_->points) {
+    index = point_index_convertor::Point2GridIndex(point, costmap);
+    if (index != -1) continue;
+
+    costmap.data[index] += 10;
+  }
 
   costmap_pub_->publish(costmap);
 }

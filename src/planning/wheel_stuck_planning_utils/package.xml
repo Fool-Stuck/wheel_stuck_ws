@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>costmap_generator</name>
+  <name>wheel_stuck_planning_utils</name>
   <version>0.0.0</version>
-  <description>The costmap_generator package</description>
+  <description>The wheel_stuck_planning_utils package</description>
   <maintainer email="maruoka.soshiro@gmail.com">Soshiro Maruoka</maintainer>
   <maintainer email="harada.akiro@gmail.com">Akiro Harada</maintainer>
 
@@ -17,7 +17,6 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>sensor_msgs</depend>
-  <depend>wheel_stuck_planning_utils</depend>
   <depend>wheel_stuck_utils</depend>
   <test_depend>ament_lint_auto</test_depend>
 

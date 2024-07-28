@@ -2,6 +2,7 @@
 #define COSTMAP_GENERATOR__COSTMAP_GENERATOR_HPP_
 
 #include <rclcpp/rclcpp.hpp>
+#include <wheel_stuck_planning_utils/point_index_convertor.hpp>
 
 #include <nav_msgs/msg/occupancy_grid.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
