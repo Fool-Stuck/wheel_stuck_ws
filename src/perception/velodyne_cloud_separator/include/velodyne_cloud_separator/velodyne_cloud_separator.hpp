@@ -18,6 +18,7 @@
 #include "pcl/point_types.hpp"
 
 #include <rclcpp/rclcpp.hpp>
+#include <wheel_stuck_common_utils/ros/function_timer.hpp>
 #include <wheel_stuck_common_utils/ros/no_callback_subscription.hpp>
 
 #include <sensor_msgs/msg/point_cloud2.hpp>
@@ -30,6 +31,8 @@
 
 namespace velodyne_cloud_separator
 {
+
+using FunctionTimer = wheel_stuck_common_utils::ros::FunctionTimer;
 
 using PointXYZIR = pcl::PointXYZIR;
 using PointCloud2 = sensor_msgs::msg::PointCloud2;
@@ -51,7 +54,7 @@ private:
   void update();
   bool try_subscribe_pc();
 
-  rclcpp::TimerBase::SharedPtr update_timer_;
+  FunctionTimer::SharedPtr update_timer_;
 
   PointCloud2Subscription::SharedPtr pc_sub_;
   PointCloud2Publisher::SharedPtr pc_ground_pub_;
