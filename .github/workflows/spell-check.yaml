@@ -2,6 +2,9 @@ name: spell-check
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   spell-check:
