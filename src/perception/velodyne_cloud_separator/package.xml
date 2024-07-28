@@ -15,7 +15,7 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>sensor_msgs</depend>
-  <depend>wheel_stuck_utils</depend>
+  <depend>wheel_stuck_common_utils</depend>
   <test_depend>ament_lint_auto</test_depend>
 
   <export>

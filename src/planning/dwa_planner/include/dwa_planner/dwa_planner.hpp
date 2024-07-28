@@ -16,7 +16,7 @@
 #define DWA_PLANNER__DWA_PLANNER_HPP_
 
 #include <rclcpp/rclcpp.hpp>
-#include <wheel_stuck_utils/ros/no_callback_subscription.hpp>
+#include <wheel_stuck_common_utils/ros/no_callback_subscription.hpp>
 
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
@@ -34,9 +34,10 @@ using PoseStamped = geometry_msgs::msg::PoseStamped;
 using Twist = geometry_msgs::msg::Twist;
 using TwistStamped = geometry_msgs::msg::TwistStamped;
 
-using OccupancyGridSubscription = wheel_stuck_utils::ros::NoCallbackSubscription<OccupancyGrid>;
-using OdometrySubscription = wheel_stuck_utils::ros::NoCallbackSubscription<Odometry>;
-using PoseStampedSubscription = wheel_stuck_utils::ros::NoCallbackSubscription<PoseStamped>;
+using OccupancyGridSubscription =
+  wheel_stuck_common_utils::ros::NoCallbackSubscription<OccupancyGrid>;
+using OdometrySubscription = wheel_stuck_common_utils::ros::NoCallbackSubscription<Odometry>;
+using PoseStampedSubscription = wheel_stuck_common_utils::ros::NoCallbackSubscription<PoseStamped>;
 using TwistStampedPublisher = rclcpp::Publisher<TwistStamped>;
 
 class DWAPlanner : public rclcpp::Node
