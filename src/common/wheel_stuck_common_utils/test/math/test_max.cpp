@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "wheel_stuck_utils/math/math.hpp"
+#include "wheel_stuck_common_utils/math/math.hpp"
 
 #include <gtest/gtest.h>
 
-TEST(lerp, lerp)
+TEST(max, max)
 {
-  using wheel_stuck_utils::math::lerp;
+  using wheel_stuck_common_utils::math::max;
 
-  EXPECT_DOUBLE_EQ(lerp(0.0, 10.0, 0.5), 5.0);
-  EXPECT_DOUBLE_EQ(lerp(0.0, 10.0, 1.5), 10.0);
-  EXPECT_DOUBLE_EQ(lerp(0.0, 10.0, -0.5), 0.0);
+  EXPECT_EQ(max(5), 5);
+  EXPECT_EQ(max(5, 2, 8, -1), 8);
+  EXPECT_DOUBLE_EQ(max(2.4, 5.6, 0.1), 5.6);
 }
