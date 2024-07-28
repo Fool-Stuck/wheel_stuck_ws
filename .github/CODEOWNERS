@@ -1,7 +1,9 @@
-src/common/wheel_stuck_utils/** @Autumn60 @Bey9434
+src/common/wheel_stuck_common_utils/** @Autumn60 @Bey9434
 src/control/joy2twist/** @Bey9434
 src/perception/velodyne_cloud_separator/** @Autumn60
 src/planning/dwa_planner/** @Autumn60
+src/planning/waypoint/wheel_stuck_waypoint_msgs/** @Autumn60
+src/planning/waypoint/wheel_stuck_waypoint_utils/** @Autumn60
 src/sample/simple_int_publisher/** @Autumn60
 src/sample/simple_int_subscriber/** @Autumn60
 README.md @RyodoTanaka

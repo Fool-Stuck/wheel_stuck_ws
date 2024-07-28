@@ -12,24 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PCL__POINT_TYPES_HPP_
-#define PCL__POINT_TYPES_HPP_
+#include "wheel_stuck_common_utils/math/math.hpp"
 
-#include <pcl/point_types.h>
+#include <gtest/gtest.h>
 
-namespace pcl
+TEST(clamp01, clamp01)
 {
-struct PointXYZIR
-{
-  PCL_ADD_POINT4D;
-  float intensity;
-  uint16_t ring;
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-} EIGEN_ALIGN16;
-}  // namespace pcl
+  using wheel_stuck_common_utils::math::clamp01;
 
-POINT_CLOUD_REGISTER_POINT_STRUCT(
-  pcl::PointXYZIR,
-  (float, x, x)(float, y, y)(float, z, z)(float, intensity, intensity)(uint16_t, ring, ring))
-
-#endif  // PCL__POINT_TYPES_HPP_
+  EXPECT_DOUBLE_EQ(clamp01(0.5), 0.5);
+  EXPECT_DOUBLE_EQ(clamp01(1.5), 1.0);
+  EXPECT_DOUBLE_EQ(clamp01(-0.5), 0.0);
+}

@@ -1,8 +1,23 @@
+// Copyright 2024 Fool Stuck Engineers
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #ifndef DWA_PLANNER__DWA_PLANNER_HPP_
 #define DWA_PLANNER__DWA_PLANNER_HPP_
 
 #include <rclcpp/rclcpp.hpp>
-#include <wheel_stuck_utils/ros/no_callback_subscription.hpp>
+#include <wheel_stuck_common_utils/ros/function_timer.hpp>
+#include <wheel_stuck_common_utils/ros/no_callback_subscription.hpp>
 
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
@@ -13,6 +28,7 @@
 
 namespace dwa_planner
 {
+using FunctionTimer = wheel_stuck_common_utils::ros::FunctionTimer;
 
 using OccupancyGrid = nav_msgs::msg::OccupancyGrid;
 using Odometry = nav_msgs::msg::Odometry;
@@ -20,9 +36,10 @@ using PoseStamped = geometry_msgs::msg::PoseStamped;
 using Twist = geometry_msgs::msg::Twist;
 using TwistStamped = geometry_msgs::msg::TwistStamped;
 
-using OccupancyGridSubscription = wheel_stuck_utils::ros::NoCallbackSubscription<OccupancyGrid>;
-using OdometrySubscription = wheel_stuck_utils::ros::NoCallbackSubscription<Odometry>;
-using PoseStampedSubscription = wheel_stuck_utils::ros::NoCallbackSubscription<PoseStamped>;
+using OccupancyGridSubscription =
+  wheel_stuck_common_utils::ros::NoCallbackSubscription<OccupancyGrid>;
+using OdometrySubscription = wheel_stuck_common_utils::ros::NoCallbackSubscription<Odometry>;
+using PoseStampedSubscription = wheel_stuck_common_utils::ros::NoCallbackSubscription<PoseStamped>;
 using TwistStampedPublisher = rclcpp::Publisher<TwistStamped>;
 
 class DWAPlanner : public rclcpp::Node
@@ -72,7 +89,7 @@ private:
   double calculate_stage_cost(const State & state);
   double calculate_terminal_cost(const State & state);
 
-  rclcpp::TimerBase::SharedPtr update_timer_;
+  FunctionTimer::SharedPtr update_timer_;
 
   OccupancyGridSubscription::SharedPtr map_sub_;
   OdometrySubscription::SharedPtr odom_sub_;

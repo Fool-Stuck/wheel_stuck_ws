@@ -1,3 +1,17 @@
+// Copyright 2024 Fool Stuck Engineers
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "velodyne_cloud_separator/velodyne_cloud_separator.hpp"
 
 #include <pcl_conversions/pcl_conversions.h>
@@ -33,13 +47,8 @@ VelodyneCloudSeparator::VelodyneCloudSeparator(const rclcpp::NodeOptions & optio
 
   // Declare timer for update function
   {
-    auto update_callback = [this]() { this->update(); };
-    auto period = std::chrono::duration_cast<std::chrono::nanoseconds>(
-      std::chrono::duration<double>(1.0 / update_rate_hz));
-    update_timer_ = std::make_shared<rclcpp::GenericTimer<decltype(update_callback)>>(
-      this->get_clock(), period, std::move(update_callback),
-      this->get_node_base_interface()->get_context());
-    this->get_node_timers_interface()->add_timer(update_timer_, nullptr);
+    update_timer_ =
+      FunctionTimer::create_function_timer(this, update_rate_hz, [this]() { this->update(); });
   }
 
   // Initialize

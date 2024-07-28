@@ -12,24 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PCL__POINT_TYPES_HPP_
-#define PCL__POINT_TYPES_HPP_
+#include <gtest/gtest.h>
 
-#include <pcl/point_types.h>
-
-namespace pcl
+int main(int argc, char ** argv)
 {
-struct PointXYZIR
-{
-  PCL_ADD_POINT4D;
-  float intensity;
-  uint16_t ring;
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-} EIGEN_ALIGN16;
-}  // namespace pcl
-
-POINT_CLOUD_REGISTER_POINT_STRUCT(
-  pcl::PointXYZIR,
-  (float, x, x)(float, y, y)(float, z, z)(float, intensity, intensity)(uint16_t, ring, ring))
-
-#endif  // PCL__POINT_TYPES_HPP_
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
