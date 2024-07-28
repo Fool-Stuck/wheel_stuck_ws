@@ -19,7 +19,6 @@
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl_conversions/pcl_conversions.h>
 
 using OccupancyGrid = nav_msgs::msg::OccupancyGrid;
 
