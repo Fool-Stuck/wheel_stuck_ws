@@ -16,6 +16,7 @@
 #define DWA_PLANNER__DWA_PLANNER_HPP_
 
 #include <rclcpp/rclcpp.hpp>
+#include <wheel_stuck_common_utils/ros/function_timer.hpp>
 #include <wheel_stuck_common_utils/ros/no_callback_subscription.hpp>
 
 #include <geometry_msgs/msg/pose_stamped.hpp>
@@ -27,6 +28,7 @@
 
 namespace dwa_planner
 {
+using FunctionTimer = wheel_stuck_common_utils::ros::FunctionTimer;
 
 using OccupancyGrid = nav_msgs::msg::OccupancyGrid;
 using Odometry = nav_msgs::msg::Odometry;
@@ -87,7 +89,7 @@ private:
   double calculate_stage_cost(const State & state);
   double calculate_terminal_cost(const State & state);
 
-  rclcpp::TimerBase::SharedPtr update_timer_;
+  FunctionTimer::SharedPtr update_timer_;
 
   OccupancyGridSubscription::SharedPtr map_sub_;
   OdometrySubscription::SharedPtr odom_sub_;

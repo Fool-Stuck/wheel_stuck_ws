@@ -89,13 +89,8 @@ DWAPlanner::DWAPlanner(const rclcpp::NodeOptions & options) : Node("dwa_planner"
 
   // Declare timer for update function
   {
-    auto update_callback = [this]() { this->update(); };
-    auto period =
-      std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(dt_));
-    update_timer_ = std::make_shared<rclcpp::GenericTimer<decltype(update_callback)>>(
-      this->get_clock(), period, std::move(update_callback),
-      this->get_node_base_interface()->get_context());
-    this->get_node_timers_interface()->add_timer(update_timer_, nullptr);
+    update_timer_ =
+      FunctionTimer::create_function_timer(this, update_rate_hz, [this]() { this->update(); });
   }
 }
 
