@@ -59,10 +59,12 @@
     "rosdistro",
     "rosidl",
     "schematypens",
+    "urdf,
     "vcstool",
     "velodyne",
     "Wextra",
     "Wpedantic",
+    "xacro",
     "XYZIR"
   ]
 }
