@@ -15,7 +15,7 @@
 #ifndef VELODYNE_CLOUD_SEPARATOR__VELODYNE_CLOUD_SEPARATOR_HPP_
 #define VELODYNE_CLOUD_SEPARATOR__VELODYNE_CLOUD_SEPARATOR_HPP_
 
-#include "pcl/point_types.hpp"
+#include "velodyne_cloud_separator/point_types.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 #include <wheel_stuck_common_utils/ros/function_timer.hpp>
