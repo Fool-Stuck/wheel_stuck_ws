@@ -1,0 +1,8 @@
+<launch>
+  <!-- Parameters -->
+  <arg name="robot_model" default="wheel_stuck"/>
+
+  <include file="$(find-pkg-share wheel_stuck_launcher)/launch/components/common_components/load_robot_info.launch.py">
+    <arg name="robot_model" value="$(var robot_model)"/>
+  </include>
+</launch>
