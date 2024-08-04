@@ -1,14 +1,24 @@
 <launch>
   <!-- Essential parameters -->
-  <arg name="robot_model" default="wheel_stuck"/>
+  <arg name="robot_model" default="wheel_stuck_alpha"/>
+  <arg name="sensor_kit_model" default="wheel_stuck_alpha_sensor_kit"/>
 
   <!-- Optional parameters -->
-  <arg name="launch_common" default="true"/>
+  <arg name="launch_robot" default="true"/>
+  <arg name="launch_sensing" default="true"/>
 
-  <!-- Common -->
-  <group if="$(var launch_common)" scoped="false">
-    <include file="$(find-pkg-share wheel_stuck_launcher)/launch/components/wheel_stuck_common.launch.xml">
+  <!-- Robot -->
+  <group if="$(var launch_robot)" scoped="false">
+    <include file="$(find-pkg-share wheel_stuck_robot_launcher)/launch/robot.launch.xml">
       <arg name="robot_model" value="$(var robot_model)"/>
+      <arg name="sensor_kit_model" value="$(var sensor_kit_model)"/>
+    </include>
+  </group>
+
+  <!-- Sensing -->
+  <group if="$(var launch_sensing)">
+    <include file="$(find-pkg-share wheel_stuck_sensing_launcher)/launch/sensing.launch.xml">
+      <arg name="sensor_kit_model" value="$(var sensor_kit_model)"/>
     </include>
   </group>
 </launch>

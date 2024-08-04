@@ -1,0 +1,9 @@
+<launch>
+  <!-- Essential Parameters -->
+  <arg name="sensor_kit_model"/>
+
+  <group>
+    <push-ros-namespace namespace="sensing"/>
+    <include file="$(find-pkg-share $(var sensor_kit_model)_launcher)/launch/sensor_kit.launch.xml"/>
+  </group>
+</launch>

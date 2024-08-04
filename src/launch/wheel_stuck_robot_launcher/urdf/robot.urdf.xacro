@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:arg name="robot_model" default=""/>
+  <xacro:arg name="sensor_kit_model" default=""/>
+
+  <!-- robot -->
+  <xacro:property name="robot_model_property" value="$(arg robot_model)"/>
+  <xacro:include filename="$(find ${robot_model_property}_description)/urdf/robot.urdf.xacro"/>
+
+  <!-- sensor kit -->
+  <xacro:property name="sensor_kit_model_property" value="$(arg sensor_kit_model)"/>
+  <xacro:include filename="$(find ${sensor_kit_model_property}_description)/urdf/sensor_kit.urdf.xacro"/>
+</robot>
