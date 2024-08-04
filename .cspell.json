@@ -59,7 +59,7 @@
     "rosdistro",
     "rosidl",
     "schematypens",
-    "urdf,
+    "urdf",
     "vcstool",
     "velodyne",
     "Wextra",
