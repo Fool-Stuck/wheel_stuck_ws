@@ -1,0 +1,14 @@
+<launch>
+  <!-- Essential Parameters -->
+  <arg name="robot_model" default="wheel_stuck"/>
+  <arg name="sensor_kit_model" default="wheel_stuck_sensor_kit"/>
+
+  <include file="$(find-pkg-share wheel_stuck_robot_launcher)/launch/components/load_robot_info.launch.py">
+    <arg name="robot_model" value="$(var robot_model)"/>
+  </include>
+
+  <include file="$(find-pkg-share wheel_stuck_robot_launcher)/launch/components/description.launch.xml">
+    <arg name="robot_model" value="$(var robot_model)"/>
+    <arg name="sensor_kit_model" value="$(var sensor_kit_model)"/>
+  </include>
+</launch>

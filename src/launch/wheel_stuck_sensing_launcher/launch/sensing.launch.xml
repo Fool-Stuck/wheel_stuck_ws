@@ -1,0 +1,8 @@
+<launch>
+  <!-- Essential Parameters -->
+  <arg name="sensor_kit_model" default="wheel_stuck_sensor_kit"/>
+
+  <group ns="sensing">
+    <include file="$(find-pkg-share $(var sensor_kit_model)_launcher)/launch/sensing.launch.xml"/>
+  </group>
+</launch>
