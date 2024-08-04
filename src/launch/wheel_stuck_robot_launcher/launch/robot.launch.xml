@@ -1,7 +1,7 @@
 <launch>
   <!-- Essential Parameters -->
-  <arg name="robot_model" default="wheel_stuck"/>
-  <arg name="sensor_kit_model" default="wheel_stuck_sensor_kit"/>
+  <arg name="robot_model"/>
+  <arg name="sensor_kit_model"/>
 
   <include file="$(find-pkg-share wheel_stuck_robot_launcher)/launch/components/load_robot_info.launch.py">
     <arg name="robot_model" value="$(var robot_model)"/>
@@ -11,4 +11,9 @@
     <arg name="robot_model" value="$(var robot_model)"/>
     <arg name="sensor_kit_model" value="$(var sensor_kit_model)"/>
   </include>
+
+  <group>
+    <push-ros-namespace namespace="robot"/>
+    <include file="$(find-pkg-share $(var robot_model)_launcher)/launch/robot.launch.xml"/>
+  </group>
 </launch>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="sensors_calibration" value="${xacro.load_yaml('$(find wheel_stuck_alpha_sensor_kit_description)/config/sensors_calibration.param.yaml')}"/>
+
+  <link name="velodyne_base_link"/>
+  <joint name="velodyne_base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="velodyne_base_link"/>
+    <origin
+      xyz="${sensors_calibration['base_link']['velodyne_base_link']['x']}
+             ${sensors_calibration['base_link']['velodyne_base_link']['y']}
+             ${sensors_calibration['base_link']['velodyne_base_link']['z']}"
+      rpy="${sensors_calibration['base_link']['velodyne_base_link']['roll']}
+             ${sensors_calibration['base_link']['velodyne_base_link']['pitch']}
+            ${sensors_calibration['base_link']['velodyne_base_link']['yaw']}"
+    />
+  </joint>
+</robot>

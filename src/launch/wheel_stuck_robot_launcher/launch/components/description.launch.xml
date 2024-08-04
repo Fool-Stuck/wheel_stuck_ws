@@ -3,7 +3,7 @@
   <arg name="robot_model"/>
   <arg name="sensor_kit_model"/>
 
-  <arg name="xacro_file" default="$(find wheel_stuck_robot_description)/urdf/robot.urdf.xacro"/>
+  <arg name="xacro_file" default="$(find-pkg-share wheel_stuck_robot_launcher)/urdf/robot.urdf.xacro"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" exec="robot_state_publisher">
     <param name="robot_description" value="$(command 'xacro $(var xacro_file) robot_model:=$(var robot_model) sensor_kit_model:=$(var sensor_kit_model)' 'warn')"/>
   </node>
