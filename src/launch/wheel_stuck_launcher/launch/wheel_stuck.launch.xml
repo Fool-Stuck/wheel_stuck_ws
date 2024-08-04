@@ -1,0 +1,14 @@
+<launch>
+  <!-- Essential parameters -->
+  <arg name="robot_model" default="wheel_stuck"/>
+
+  <!-- Optional parameters -->
+  <arg name="launch_common" default="true"/>
+
+  <!-- Common -->
+  <group if="$(var launch_common)" scoped="false">
+    <include file="$(find-pkg-share wheel_stuck_launcher)/launch/components/wheel_stuck_common.launch.xml">
+      <arg name="robot_model" value="$(var robot_model)"/>
+    </include>
+  </group>
+</launch>
