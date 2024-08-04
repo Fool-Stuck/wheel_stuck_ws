@@ -27,7 +27,7 @@ ament_auto_add_library(pointcloud_preprocessor SHARED
 
 # pointcloud_preprocessorノードの登録
 rclcpp_components_register_node(pointcloud_preprocessor
-  PLUGIN "pointcloud_preprocessor::pointcloud_preprocessor"
+  PLUGIN "pointcloud_preprocessor::PointCloudPreprocessor"
   EXECUTABLE pointcloud_preprocessor_node
 )
 

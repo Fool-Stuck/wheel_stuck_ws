@@ -21,40 +21,36 @@
 
 #include <sensor_msgs/msg/point_cloud2.hpp>
 
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+
 #ifndef LASERS_NUM
 #define LASERS_NUM 32
 #endif
 
-namespace velodyne_cloud_separator
+namespace pointcloud_preprocessor
 {
 
 using FunctionTimer = wheel_stuck_common_utils::ros::FunctionTimer;
-
-using PointXYZIR = pcl::PointXYZIR;
 using PointCloud2 = sensor_msgs::msg::PointCloud2;
 
-using PointCloud2Subscription = wheel_stuck_common_utils::ros::NoCallbackSubscription<PointCloud2>;
-using PointCloud2Publisher = rclcpp::Publisher<PointCloud2>;
-
-class PoitnCloud_Preprocessor : public rclcpp::Node
+class PointCloudPreprocessor : public rclcpp::Node
 {
 private:
   // enum class PointType { UNKNOWN = 0, GROUND = 1, OBSTACLE = 2 };
 
 public:
-  explicit PointCloud_Preprocessor(const rclcpp::NodeOptions & options);
+  explicit PointCloudPreprocessor(const rclcpp::NodeOptions & options);
 
 private:
-  void update();
   void processCloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
   FunctionTimer::SharedPtr update_timer_;
 
-  PointCloud2Subscription::SharedPtr pc_sub_;
-  PointCloud2Subscription::SharedPtr pc_pub_;
-
-  pcl::PointCloud<PointXYZIR>::Ptr pc_;
+  rclcpp::Subscription<PointCloud2>::SharedPtr pc_sub_;
+  rclcpp::Publisher<PointCloud2>::SharedPtr pc_pub_;
 };
-}  // namespace velodyne_cloud_separator
+
+}  // namespace pointcloud_preprocessor
 
 #endif  // POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_

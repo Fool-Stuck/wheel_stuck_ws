@@ -16,23 +16,23 @@
 
 namespace pointcloud_preprocessor
 {
-pointcloud_preprocessor::pointcloud_preprocessor(const rclcpp::NodeOptions & options)
+PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & options)
 : Node("pointcloud_preprocessor", options)
 {
   // 受信機を作る。
   pc_sub_ = this->create_subscription<PointCloud2>(
-    "~/input/points", 10,
-    std::bind(&pointcloud_preprocessor::joy_callback, this, std::placeholders::_1));
+    "/velodyne_points", 10,
+    std::bind(&PointCloudPreprocessor::processCloud, this, std::placeholders::_1));
   // 送信機を作る。
-  pc_pub_ = this->create_publisher<PointCloud2>("~/output/filtered_points", 10);
+  pc_pub_ = this->create_publisher<PointCloud2>("/output/filtered_points", 10);
 }
 
-void PointCloud_Preprocessor::processCloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
+void PointCloudPreprocessor::processCloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
 {
-  pc_pub_->publish(*msg)
+  pc_pub_->publish(*msg);
 }
 
 }  // namespace pointcloud_preprocessor
 #include "rclcpp_components/register_node_macro.hpp"
 
-RCLCPP_COMPONENTS_REGISTER_NODE(pointcloud_preprocessor::pointcloud_preprocessor)
+RCLCPP_COMPONENTS_REGISTER_NODE(pointcloud_preprocessor::PointCloudPreprocessor)
