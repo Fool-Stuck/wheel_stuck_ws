@@ -1,7 +1,7 @@
 <launch>
   <!-- Essential parameters -->
-  <arg name="robot_model" default="wheel_stuck_alpha"/>
-  <arg name="sensor_kit_model" default="wheel_stuck_alpha_sensor_kit"/>
+  <arg name="robot_model" default="wheel_stuck_go"/>
+  <arg name="sensor_kit_model" default="wheel_stuck_go_sensor_kit"/>
 
   <!-- Optional parameters -->
   <arg name="launch_robot" default="true"/>

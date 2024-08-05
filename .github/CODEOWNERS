@@ -1,6 +1,6 @@
 src/common/wheel_stuck_common_utils/** @Autumn60 @Bey9434
 src/control/joy2twist/** @Bey9434
-src/description/wheel_stuck_alpha/** @Autumn60
+src/description/wheel_stuck_go/** @Autumn60
 src/launch/wheel_stuck_launcher/** @Autumn60
 src/launch/wheel_stuck_robot_launcher/** @Autumn60
 src/launch/wheel_stuck_sensing_launcher/** @Autumn60
