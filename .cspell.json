@@ -54,6 +54,7 @@
     "odometry",
     "pkg",
     "pkgs",
+    "pointcloud",
     "rclcpp",
     "rosdep",
     "rosdistro",
