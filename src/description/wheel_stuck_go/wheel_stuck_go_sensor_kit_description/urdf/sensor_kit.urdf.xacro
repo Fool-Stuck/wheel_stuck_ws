@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:property name="sensors_calibration" value="${xacro.load_yaml('$(find wheel_stuck_alpha_sensor_kit_description)/config/sensors_calibration.param.yaml')}"/>
+  <xacro:property name="sensors_calibration" value="${xacro.load_yaml('$(find wheel_stuck_go_sensor_kit_description)/config/sensors_calibration.param.yaml')}"/>
 
   <link name="velodyne_base_link"/>
   <joint name="velodyne_base_joint" type="fixed">
