@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(wheel_stuck_alpha_launcher)
+project(wheel_stuck_go_sensor_kit_launcher)
 
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
