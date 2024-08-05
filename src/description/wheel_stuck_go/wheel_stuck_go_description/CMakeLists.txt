@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(wheel_stuck_alpha_description)
+project(wheel_stuck_go_description)
 
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
