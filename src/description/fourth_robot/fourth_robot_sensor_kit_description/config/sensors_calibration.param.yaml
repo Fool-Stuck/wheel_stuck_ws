@@ -1,0 +1,29 @@
+base_link:
+  front_lrf_link:
+    x: 0.2215
+    y: 0.0
+    z: 0.04684
+    roll: 0.0
+    pitch: 0.0
+    yaw: 0.0
+  rear_lrf_link:
+    x: -0.452
+    y: 0.0
+    z: 0.04684
+    roll: 0.0
+    pitch: 0.0
+    yaw: -3.14159265359
+  gim30_link:
+    x: 0.07395931
+    y: 0.0
+    z: 0.024578237
+    roll: 0.0
+    pitch: 0.0
+    yaw: 0.0
+  gps_link:
+    x: -0.06229
+    y: 0.0
+    z: 0.420552
+    roll: 0.0
+    pitch: 0.0
+    yaw: -3.14159265359

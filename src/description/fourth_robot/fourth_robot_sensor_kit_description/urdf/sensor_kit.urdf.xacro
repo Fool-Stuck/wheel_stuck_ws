@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="sensors_calibration" value="${xacro.load_yaml('$(find fourth_robot_sensor_kit_description)/config/sensors_calibration.param.yaml')}"/>
+
+  <link name="front_lrf_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://fourth_robot_sensor_kit_description/mesh/front_lrf/front_lrf.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="front_lrf_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_lrf_link"/>
+    <origin
+      xyz="${sensors_calibration['base_link']['front_lrf_link']['x']}
+             ${sensors_calibration['base_link']['front_lrf_link']['y']}
+             ${sensors_calibration['base_link']['front_lrf_link']['z']}"
+      rpy="${sensors_calibration['base_link']['front_lrf_link']['roll']}
+             ${sensors_calibration['base_link']['front_lrf_link']['pitch']}
+            ${sensors_calibration['base_link']['front_lrf_link']['yaw']}"
+    />
+  </joint>
+
+  <link name="rear_lrf_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://fourth_robot_sensor_kit_description/mesh/rear_lrf/rear_lrf.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="rear_lrf_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_lrf_link"/>
+    <origin
+      xyz="${sensors_calibration['base_link']['rear_lrf_link']['x']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['y']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['z']}"
+      rpy="${sensors_calibration['base_link']['rear_lrf_link']['roll']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['pitch']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['yaw']}"
+    />
+  </joint>
+
+  <link name="gim30_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://fourth_robot_sensor_kit_description/mesh/gim30/gim30.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="gim30_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gim30_link"/>
+    <origin
+      xyz="${sensors_calibration['base_link']['gim30_link']['x']}
+              ${sensors_calibration['base_link']['gim30_link']['y']}
+              ${sensors_calibration['base_link']['gim30_link']['z']}"
+      rpy="${sensors_calibration['base_link']['gim30_link']['roll']}
+              ${sensors_calibration['base_link']['gim30_link']['pitch']}
+              ${sensors_calibration['base_link']['gim30_link']['yaw']}"
+    />
+  </joint>
+
+  <link name="gps_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://fourth_robot_sensor_kit_description/mesh/gps/gps.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin
+      xyz="${sensors_calibration['base_link']['gps_link']['x']}
+              ${sensors_calibration['base_link']['gps_link']['y']}
+              ${sensors_calibration['base_link']['gps_link']['z']}"
+      rpy="${sensors_calibration['base_link']['gps_link']['roll']}
+              ${sensors_calibration['base_link']['gps_link']['pitch']}
+              ${sensors_calibration['base_link']['gps_link']['yaw']}"
+    />
+  </joint>
+</robot>

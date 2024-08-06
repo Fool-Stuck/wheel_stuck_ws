@@ -1,0 +1,9 @@
+/**:
+  ros__parameters:
+    wheel_radius: 0.193125  # [m]
+    wheel_tread: 0.42875    # [m]
+    front_overhang: 0.0     # [m]
+    rear_overhang: 0.0      # [m]
+    left_overhang: 0.0      # [m]
+    right_overhang: 0.0     # [m]
+    robot_height: 0.0       # [m]
