@@ -15,6 +15,8 @@
 #ifndef POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_
 #define POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_
 
+#include "pointcloud_preprocessor/point_types.hpp"
+
 #include <rclcpp/rclcpp.hpp>
 #include <tf2_eigen/tf2_eigen.hpp>
 #include <wheel_stuck_common_utils/geometry/conversion.hpp>
@@ -24,11 +26,13 @@
 
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #include <tf2_sensor_msgs/tf2_sensor_msgs.hpp>
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
+#include <tf2/LinearMath/Transform.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 
@@ -61,8 +65,8 @@ private:
   tf2_ros::TransformListener tf_listener_;
   geometry_msgs::msg::TransformStamped transformStamped_;
   Eigen::Affine3d transform_;
-  pcl::PointCloud<pcl::PointXYZ> pcl_input_;
-  pcl::PointCloud<pcl::PointXYZ> pcl_output_;
+  pcl::PointCloud<pcl::PointXYZIR> pcl_input_;
+  pcl::PointCloud<pcl::PointXYZIR> pcl_output_;
   PointCloud2 output_msg_;
 };
 

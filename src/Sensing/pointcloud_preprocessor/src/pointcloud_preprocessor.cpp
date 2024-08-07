@@ -36,19 +36,28 @@ void PointCloudPreprocessor::processCloud(const sensor_msgs::msg::PointCloud2::S
     // velodyne_linkからbase_linkへの変換を取得する。
     transformStamped_ =
       tf_buffer_.lookupTransform("base_link", msg->header.frame_id, tf2::TimePointZero);
+    RCLCPP_INFO(this->get_logger(), "Transform obtained");
+
     // 座標変換行列の取得
-    tf2::fromMsg(transform_stamped.transform, transform);
+    tf2::fromMsg(transformStamped_.transform, transform_);
+    if (std::isnan(transform_.matrix().norm())) {
+      throw std::runtime_error("Transform contains NaN values");
+    }
 
     // 点群データの取得
     pcl::fromROSMsg(*msg, pcl_input_);
-    pcl_output_ = wheel_stuck_common_utils::pointcloud::transform_pointcloud<pcl::PointXYZ>(
+    RCLCPP_INFO(this->get_logger(), "Point cloud converted to PCL format");
+    // 点群データの変換
+    pcl_output_ = wheel_stuck_common_utils::pointcloud::transform_pointcloud<pcl::PointXYZIR>(
       pcl_input_, transform_);
+    RCLCPP_INFO(this->get_logger(), "Point cloud transformed");
 
     // 座標変換したデータのパブリッシュ
     pcl::toROSMsg(pcl_output_, output_msg_);
     output_msg_.header = msg->header;
     output_msg_.header.frame_id = "base_link";  // 変換後のフレームIDを設定
     pc_pub_->publish(output_msg_);
+    RCLCPP_INFO(this->get_logger(), "Filtered point cloud published");
   } catch (tf2::TransformException & ex) {
     RCLCPP_WARN(this->get_logger(), "Could not transform: %s", ex.what());
   }
