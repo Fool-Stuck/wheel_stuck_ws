@@ -17,9 +17,6 @@ endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
-# インクルードディレクトリを追加
-include_directories(include)
-
 # pointcloud_preprocessorノードのライブラリを追加
 ament_auto_add_library(pointcloud_preprocessor SHARED
   src/pointcloud_preprocessor.cpp

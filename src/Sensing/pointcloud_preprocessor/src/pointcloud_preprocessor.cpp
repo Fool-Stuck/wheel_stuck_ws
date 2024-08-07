@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <pointcloud_preprocessor/pointcloud_preprocessor.hpp>
+#include "pointcloud_preprocessor/pointcloud_preprocessor.hpp"
 
 namespace pointcloud_preprocessor
 {
@@ -35,15 +35,20 @@ void PointCloudPreprocessor::processCloud(const sensor_msgs::msg::PointCloud2::S
   try {
     // velodyne_linkからbase_linkへの変換を取得する。
     transformStamped_ =
-      tf_buffer_.lookupTransform("base_link", msg->header.frame_id, tf2::TimePointZero)
-      // 座標変換行列の取得
-      Eigen::Matrix4f transform_matrix =
-        Matrix4f（transform_stamped
-          .transform）
-            // 点群データの取得
-            pcl_ros::transforPointCloud("base_link", transform_cloud, transformStamped)
-        // 座標変換したデータのパブリッシュ
-        pc_pub_->publish(transformed_cloud);
+      tf_buffer_.lookupTransform("base_link", msg->header.frame_id, tf2::TimePointZero);
+    // 座標変換行列の取得
+    tf2::fromMsg(transform_stamped.transform, transform);
+
+    // 点群データの取得
+    pcl::fromROSMsg(*msg, pcl_input_);
+    pcl_output_ = wheel_stuck_common_utils::pointcloud::transform_pointcloud<pcl::PointXYZ>(
+      pcl_input_, transform_);
+
+    // 座標変換したデータのパブリッシュ
+    pcl::toROSMsg(pcl_output_, output_msg_);
+    output_msg_.header = msg->header;
+    output_msg_.header.frame_id = "base_link";  // 変換後のフレームIDを設定
+    pc_pub_->publish(output_msg_);
   } catch (tf2::TransformException & ex) {
     RCLCPP_WARN(this->get_logger(), "Could not transform: %s", ex.what());
   }

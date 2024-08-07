@@ -16,18 +16,21 @@
 #define POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_
 
 #include <rclcpp/rclcpp.hpp>
+#include <tf2_eigen/tf2_eigen.hpp>
 #include <wheel_stuck_common_utils/geometry/conversion.hpp>
 #include <wheel_stuck_common_utils/pointcloud/transform_pointcloud.hpp>
 #include <wheel_stuck_common_utils/ros/function_timer.hpp>
 #include <wheel_stuck_common_utils/ros/no_callback_subscription.hpp>
 
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
+#include <tf2_sensor_msgs/tf2_sensor_msgs.hpp>
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include <pcl_conversions/pcl_conversions.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
-#include <tf2_sensor_msgs/tf2_sensor_msgs.h>
 
 #ifndef LASERS_NUM
 #define LASERS_NUM 32
@@ -38,7 +41,6 @@ namespace pointcloud_preprocessor
 
 using FunctionTimer = wheel_stuck_common_utils::ros::FunctionTimer;
 using PointCloud2 = sensor_msgs::msg::PointCloud2;
-using to_matrix4f = wheel_stuck_common_utils::geometry::to_matrix4f;
 
 class PointCloudPreprocessor : public rclcpp::Node
 {
@@ -57,8 +59,11 @@ private:
   rclcpp::Publisher<PointCloud2>::SharedPtr pc_pub_;
   tf2_ros::Buffer tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
-  geometry_msgs::TransformStamped transformStamped_;
-  Pointcloud2 transformed_cloud;
+  geometry_msgs::msg::TransformStamped transformStamped_;
+  Eigen::Affine3d transform_;
+  pcl::PointCloud<pcl::PointXYZ> pcl_input_;
+  pcl::PointCloud<pcl::PointXYZ> pcl_output_;
+  PointCloud2 output_msg_;
 };
 
 }  // namespace pointcloud_preprocessor
