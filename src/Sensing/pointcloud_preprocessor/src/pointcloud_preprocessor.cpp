@@ -32,6 +32,7 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
 
 void PointCloudPreprocessor::processCloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
 {
+  std::cout << "Frame ID: " << msg->header.frame_id << std::endl;
   try {
     // velodyne_linkからbase_linkへの変換を取得する。
     transformStamped_ =
@@ -47,6 +48,7 @@ void PointCloudPreprocessor::processCloud(const sensor_msgs::msg::PointCloud2::S
     // 点群データの取得
     pcl::fromROSMsg(*msg, pcl_input_);
     RCLCPP_INFO(this->get_logger(), "Point cloud converted to PCL format");
+
     // 点群データの変換
     pcl_output_ = wheel_stuck_common_utils::pointcloud::transform_pointcloud<pcl::PointXYZIR>(
       pcl_input_, transform_);
