@@ -23,6 +23,8 @@
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 
+#include <string>
+
 namespace path_manager
 {
 
@@ -36,10 +38,21 @@ public:
   explicit PathRecorder(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
 private:
+  void try_record();
+  void record(const geometry_msgs::msg::Pose & pose);
+
   tf2_ros::Buffer tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
 
   FunctionTimer::SharedPtr try_record_timer_;
+  bool is_recording_;
+
+  std::string map_frame_;
+  std::string robot_frame_;
+  double linear_record_interval_sqr_;
+  double angular_record_interval_;
+
+  geometry_msgs::msg::Pose last_recorded_pose_;
 };
 }  // namespace path_manager
 
