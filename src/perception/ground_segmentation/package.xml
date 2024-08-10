@@ -14,7 +14,8 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>sensor_msgs</depend>
-  <depend>wheel_stuck_common_utils</depend>
+  <depend>tf2_eigen</depend>
+  <depend>tf2_ros</depend>
   <test_depend>ament_lint_auto</test_depend>
 
   <export>
