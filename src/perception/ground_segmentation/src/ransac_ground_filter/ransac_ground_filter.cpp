@@ -19,11 +19,11 @@ namespace ground_segmentation::ransac_ground_filter
 RANSACGroundFilter::RANSACGroundFilter(const rclcpp::NodeOptions & options)
 : GroundFilter("ransac_ground_filter", options)
 {
-  footprint_frame_ = get_parameter("footprint_frame").as_string();
-  leaf_size_ = get_parameter("leaf_size").as_double();
-  distance_threshold_ = get_parameter("distance_threshold").as_double();
-  max_iterations_ = get_parameter("max_iterations").as_int();
-  slope_threshold_rad_ = get_parameter("slope_threshold").as_double() * M_PI / 180.0;
+  footprint_frame_ = declare_parameter<std::string>("footprint_frame", "base_link");
+  leaf_size_ = declare_parameter<double>("leaf_size", 0.1);
+  distance_threshold_ = declare_parameter<double>("distance_threshold", 0.1);
+  max_iterations_ = declare_parameter<int>("max_iterations", 1000);
+  slope_threshold_rad_ = declare_parameter<double>("slope_threshold", 10.0) * M_PI / 180.0;
 }
 
 bool RANSACGroundFilter::filter(const PointCloud2 & input, PointCloud2 & output)
