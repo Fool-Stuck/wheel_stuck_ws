@@ -64,10 +64,10 @@ private:
   tf2_ros::Buffer tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
   geometry_msgs::msg::TransformStamped transformStamped_;
-  Eigen::Affine3d transform_;
   pcl::PointCloud<pcl::PointXYZIR> pcl_input_;
   pcl::PointCloud<pcl::PointXYZIR> pcl_output_;
   PointCloud2 output_msg_;
+  Eigen::Matrix4f transform_matrix;
 };
 
 }  // namespace pointcloud_preprocessor

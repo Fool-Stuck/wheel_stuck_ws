@@ -27,42 +27,37 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
     "/velodyne_points", 10,
     std::bind(&PointCloudPreprocessor::processCloud, this, std::placeholders::_1));
   // 送信機を作る。
-  pc_pub_ = this->create_publisher<PointCloud2>("/output/filtered_points", 10);
+  pc_pub_ = this->create_publisher<PointCloud2>("~/output/filtered_points", 10);
 }
 
 void PointCloudPreprocessor::processCloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
 {
-  std::cout << "Frame ID: " << msg->header.frame_id << std::endl;
+  // std::cout << "Frame ID: " << msg->header.frame_id << std::endl;
   try {
-    // velodyne_linkからbase_linkへの変換を取得する。
+    // velodyne_linkからbase_linkへの変換を取得する。引数は（変換先のフレームID,変換元のフレームID,最新の変換データを使用）
     transformStamped_ =
       tf_buffer_.lookupTransform("base_link", msg->header.frame_id, tf2::TimePointZero);
-    RCLCPP_INFO(this->get_logger(), "Transform obtained");
-
-    // 座標変換行列の取得
-    tf2::fromMsg(transformStamped_.transform, transform_);
-    if (std::isnan(transform_.matrix().norm())) {
-      throw std::runtime_error("Transform contains NaN values");
-    }
-
-    // 点群データの取得
-    pcl::fromROSMsg(*msg, pcl_input_);
-    RCLCPP_INFO(this->get_logger(), "Point cloud converted to PCL format");
-
-    // 点群データの変換
-    pcl_output_ = wheel_stuck_common_utils::pointcloud::transform_pointcloud<pcl::PointXYZIR>(
-      pcl_input_, transform_);
-    RCLCPP_INFO(this->get_logger(), "Point cloud transformed");
-
-    // 座標変換したデータのパブリッシュ
-    pcl::toROSMsg(pcl_output_, output_msg_);
-    output_msg_.header = msg->header;
-    output_msg_.header.frame_id = "base_link";  // 変換後のフレームIDを設定
-    pc_pub_->publish(output_msg_);
-    RCLCPP_INFO(this->get_logger(), "Filtered point cloud published");
   } catch (tf2::TransformException & ex) {
     RCLCPP_WARN(this->get_logger(), "Could not transform: %s", ex.what());
   }
+
+  // 座標変換行列(表現行列)の取得
+  transform_matrix = wheel_stuck_common_utils::geometry::to_matrix4f(transformStamped_.transform);
+
+  // ROSメッセージ形式の点群データをPCL形式に変換
+  pcl::fromROSMsg(*msg, pcl_input_);
+
+  // 点群データの座標変換
+  pcl::transformPointCloud(pcl_input_, pcl_output_, transform_matrix);
+
+  // 座標変換した点群データを再びROSメッセージ形式に変換
+  pcl::toROSMsg(pcl_output_, output_msg_);
+  // メッセージのヘッダーを設定
+  output_msg_.header = msg->header;
+  output_msg_.header.frame_id = "base_link";  // 変換後のフレームIDを設定
+
+  // 変換後の点群データをパブリッシュ
+  pc_pub_->publish(output_msg_);
 }
 
 }  // namespace pointcloud_preprocessor
