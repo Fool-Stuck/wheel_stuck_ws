@@ -28,6 +28,11 @@ bool GroundFilter::try_transform_pointcloud(
   const std::string & target_frame, const PointCloud2 & input, PointCloud2 & output,
   const double timeout)
 {
+  if (input.header.frame_id == target_frame) {
+    output = input;
+    return true;
+  }
+
   geometry_msgs::msg::TransformStamped transform;
   try {
     transform = tf_buffer_.lookupTransform(
