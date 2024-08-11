@@ -39,7 +39,7 @@ void PathRecorder::try_record()
 
   geometry_msgs::msg::TransformStamped transform;
   try {
-    transform = tf_buffer_.lookupTransform(map_frame_, robot_frame_, tf2::TimePointZero);
+    transform = tf_buffer_.lookupTransform(robot_frame_, map_frame_, tf2::TimePointZero);
   } catch (tf2::TransformException & ex) {
     is_recording_ = false;
     return;
