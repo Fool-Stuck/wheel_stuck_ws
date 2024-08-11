@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    footprint_frame: base_link
+    leaf_size: 0.1
+    distance_threshold: 0.3
+    max_iterations: 1000
+    slope_threshold: 10.0
