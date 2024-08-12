@@ -15,59 +15,40 @@
 #ifndef POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_
 #define POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_
 
-#include "pointcloud_preprocessor/point_types.hpp"
-
+#include <Eigen/Core>
 #include <rclcpp/rclcpp.hpp>
-#include <tf2_eigen/tf2_eigen.hpp>
 #include <wheel_stuck_common_utils/geometry/conversion.hpp>
-#include <wheel_stuck_common_utils/pointcloud/transform_pointcloud.hpp>
-#include <wheel_stuck_common_utils/ros/function_timer.hpp>
-#include <wheel_stuck_common_utils/ros/no_callback_subscription.hpp>
 
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
-#include <tf2_sensor_msgs/tf2_sensor_msgs.hpp>
 
+#include <pcl/common/transforms.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <tf2/LinearMath/Transform.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 
-#ifndef LASERS_NUM
-#define LASERS_NUM 32
-#endif
+#include <string>
 
 namespace pointcloud_preprocessor
 {
-
-using FunctionTimer = wheel_stuck_common_utils::ros::FunctionTimer;
 using PointCloud2 = sensor_msgs::msg::PointCloud2;
+using wheel_stuck_common_utils::geometry::to_matrix4f;
 
 class PointCloudPreprocessor : public rclcpp::Node
 {
-private:
-  // enum class PointType { UNKNOWN = 0, GROUND = 1, OBSTACLE = 2 };
-
 public:
   explicit PointCloudPreprocessor(const rclcpp::NodeOptions & options);
 
 private:
-  void processCloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
-
-  FunctionTimer::SharedPtr update_timer_;
+  void process_pointcloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
   rclcpp::Subscription<PointCloud2>::SharedPtr pc_sub_;
   rclcpp::Publisher<PointCloud2>::SharedPtr pc_pub_;
   tf2_ros::Buffer tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
-  geometry_msgs::msg::TransformStamped transformStamped_;
-  pcl::PointCloud<pcl::PointXYZIR> pcl_input_;
-  pcl::PointCloud<pcl::PointXYZIR> pcl_output_;
-  PointCloud2 output_msg_;
-  Eigen::Matrix4f transform_matrix;
+  std::string target_frame_id_;
 };
 
 }  // namespace pointcloud_preprocessor
