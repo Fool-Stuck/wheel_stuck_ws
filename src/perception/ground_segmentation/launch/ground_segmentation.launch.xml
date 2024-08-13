@@ -1,0 +1,14 @@
+<launch>
+  <arg name="method" default="ransac"/>
+
+  <arg name="input_points_topic" default="/velodyne_points"/>
+  <arg name="output_points_topic" default="/velodyne_points/obstacle"/>
+
+  <arg name="config_file" default="$(find-pkg-share ground_segmentation)/config/$(var method)_ground_filter.param.yaml"/>
+
+  <node pkg="ground_segmentation" name="$(var method)_ground_filter" exec="$(var method)_ground_filter_node" output="screen">
+    <remap from="~/input/points" to="$(var input_points_topic)"/>
+    <remap from="~/output/points" to="$(var output_points_topic)"/>
+    <param from="$(var config_file)"/>
+  </node>
+</launch>
