@@ -24,12 +24,12 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
 {
   // パラメーターの宣言
   target_frame_id_ = declare_parameter<std::string>("target_frame_id", "base_link");
-  leaf_size_ = declare_parameter<double>("leaf_size", "0.1")
+  leaf_size_ = declare_parameter<double>("leaf_size", 0.1);
 
-    // 受信機を作る。
-    pc_sub_ = this->create_subscription<PointCloud2>(
-      "/velodyne_points", 10,
-      std::bind(&PointCloudPreprocessor::process_pointcloud, this, std::placeholders::_1));
+  // 受信機を作る。
+  pc_sub_ = this->create_subscription<PointCloud2>(
+    "/velodyne_points", 10,
+    std::bind(&PointCloudPreprocessor::process_pointcloud, this, std::placeholders::_1));
   // 送信機を作る。
   pc_pub_ = this->create_publisher<PointCloud2>("~/output/filtered_points", 10);
 }
