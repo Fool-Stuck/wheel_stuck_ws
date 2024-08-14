@@ -50,6 +50,7 @@ private:
   tf2_ros::Buffer tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
   std::string target_frame_id_;
+  double leaf_size_;
 };
 
 }  // namespace pointcloud_preprocessor

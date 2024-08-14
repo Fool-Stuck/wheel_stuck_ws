@@ -22,11 +22,14 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
   tf_listener_(tf_buffer_)        // tf2_ros::TransformListenerの初期化
 
 {
+  // パラメーターの宣言
   target_frame_id_ = declare_parameter<std::string>("target_frame_id", "base_link");
-  // 受信機を作る。
-  pc_sub_ = this->create_subscription<PointCloud2>(
-    "/velodyne_points", 10,
-    std::bind(&PointCloudPreprocessor::process_pointcloud, this, std::placeholders::_1));
+  leaf_size_ = declare_parameter<double>("leaf_size", "0.1")
+
+    // 受信機を作る。
+    pc_sub_ = this->create_subscription<PointCloud2>(
+      "/velodyne_points", 10,
+      std::bind(&PointCloudPreprocessor::process_pointcloud, this, std::placeholders::_1));
   // 送信機を作る。
   pc_pub_ = this->create_publisher<PointCloud2>("~/output/filtered_points", 10);
 }
@@ -61,7 +64,7 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
   // ダウンサンプリング
   pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
   voxel_grid.setInputCloud(pcl_output_.makeShared());
-  voxel_grid.setLeafSize(0.1f, 0.1f, 0.1f);
+  voxel_grid.setLeafSize(leaf_size_, leaf_size_, leaf_size_);
   pcl::PointCloud<pcl::PointXYZ> downsampled_cloud_;
   voxel_grid.filter(downsampled_cloud_);
 
