@@ -67,6 +67,7 @@
     "urdf",
     "vcstool",
     "velodyne",
+    "voxel",
     "Wextra",
     "Wpedantic",
     "xacro",
