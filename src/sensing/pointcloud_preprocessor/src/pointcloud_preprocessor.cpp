@@ -58,8 +58,15 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
   // 点群データの座標変換
   pcl::transformPointCloud(pcl_input_, pcl_output_, transform_matrix);
 
+  // ダウンサンプリング
+  pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
+  voxel_grid.setInputCloud(pcl_output_.makeShared());
+  voxel_grid.setLeafSize(0.1f, 0.1f, 0.1f);
+  pcl::PointCloud<pcl::PointXYZ> downsampled_cloud_;
+  voxel_grid.filter(downsampled_cloud_);
+
   // 座標変換した点群データを再びROSメッセージ形式に変換
-  pcl::toROSMsg(pcl_output_, output_msg_);
+  pcl::toROSMsg(downsampled_cloud_, output_msg_);
   // メッセージのヘッダーを設定
   output_msg_.header = msg->header;
   output_msg_.header.frame_id = target_frame_id_;  // 変換後のフレームIDを設定
