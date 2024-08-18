@@ -37,15 +37,11 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
 void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
 {
   // std::cout << "Frame ID: " << msg->header.frame_id << std::endl;
-  geometry_msgs::msg::TransformStamped transformStamped_;
-  pcl::PointCloud<pcl::PointXYZ> pcl_input_;
-  pcl::PointCloud<pcl::PointXYZ> pcl_output_;
-  PointCloud2 output_msg_;
-  Eigen::Matrix4f transform_matrix;
+  geometry_msgs::msg::TransformStamped transform_stamped;
 
   try {
     // velodyne_linkからbase_linkへの変換を取得する。引数は（変換先のフレームID,変換元のフレームID,最新の変換データを使用）
-    transformStamped_ =
+    transform_stamped =
       tf_buffer_.lookupTransform(target_frame_id_, msg->header.frame_id, tf2::TimePointZero);
   } catch (tf2::TransformException & ex) {
     RCLCPP_WARN(this->get_logger(), "Could not transform: %s", ex.what());
@@ -53,29 +49,33 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
   }
 
   // 座標変換行列(表現行列)の取得
-  transform_matrix = to_matrix4f(transformStamped_.transform);
+  Eigen::Matrix4f transform_matrix;
+  transform_matrix = to_matrix4f(transform_stamped.transform);
 
   // ROSメッセージ形式の点群データをPCL形式に変換
-  pcl::fromROSMsg(*msg, pcl_input_);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_input(new pcl::PointCloud<pcl::PointXYZ>());
+  pcl::fromROSMsg(*msg, *pcl_input);
 
   // 点群データの座標変換
-  pcl::transformPointCloud(pcl_input_, pcl_output_, transform_matrix);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_output(new pcl::PointCloud<pcl::PointXYZ>());
+  pcl::transformPointCloud(*pcl_input, *pcl_output, transform_matrix);
 
   // ダウンサンプリング
   pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
-  voxel_grid.setInputCloud(pcl_output_.makeShared());
+  voxel_grid.setInputCloud(pcl_output);
   voxel_grid.setLeafSize(leaf_size_, leaf_size_, leaf_size_);
-  pcl::PointCloud<pcl::PointXYZ> downsampled_cloud_;
-  voxel_grid.filter(downsampled_cloud_);
+  pcl::PointCloud<pcl::PointXYZ> downsampled_cloud;
+  voxel_grid.filter(downsampled_cloud);
 
   // 座標変換した点群データを再びROSメッセージ形式に変換
-  pcl::toROSMsg(downsampled_cloud_, output_msg_);
+  PointCloud2 output_msg;
+  pcl::toROSMsg(downsampled_cloud, output_msg);
   // メッセージのヘッダーを設定
-  output_msg_.header = msg->header;
-  output_msg_.header.frame_id = target_frame_id_;  // 変換後のフレームIDを設定
+  output_msg.header = msg->header;
+  output_msg.header.frame_id = target_frame_id_;  // 変換後のフレームIDを設定
 
   // 変換後の点群データをパブリッシュ
-  pc_pub_->publish(output_msg_);
+  pc_pub_->publish(output_msg);
 }
 
 }  // namespace pointcloud_preprocessor
