@@ -21,6 +21,7 @@
   <depend>tf2_ros</depend>
   <depend>tf2_sensor_msgs</depend>
   <depend>wheel_stuck_common_utils</depend>
+  <depend>wheel_stuck_robot_utils</depend>
   <test_depend>ament_lint_auto</test_depend>
 
   <export>

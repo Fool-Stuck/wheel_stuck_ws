@@ -14,6 +14,10 @@
 
 #include "pointcloud_preprocessor/pointcloud_preprocessor.hpp"
 
+#include "pointcloud_preprocessor/cropbox_filter.hpp"
+
+#include <wheel_stuck_robot_utils/robot_info.hpp>
+
 namespace pointcloud_preprocessor
 {
 PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & options)
@@ -26,10 +30,16 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
   target_frame_id_ = declare_parameter<std::string>("target_frame_id", "base_link");
   leaf_size_ = declare_parameter<double>("leaf_size", 0.1);
 
+  // CropBoxfolterのインスタンスを作成。
+  cropbox_filter::CropBoxFilter crop_box_filter(*this);
+  // パラメーターを出力する関数を呼び出す
+  print_parameters();
+
   // 受信機を作る。
   pc_sub_ = this->create_subscription<PointCloud2>(
     "/velodyne_points", 10,
     std::bind(&PointCloudPreprocessor::process_pointcloud, this, std::placeholders::_1));
+
   // 送信機を作る。
   pc_pub_ = this->create_publisher<PointCloud2>("~/output/filtered_points", 10);
 }
@@ -48,13 +58,13 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
     return;
   }
 
-  // 座標変換行列(表現行列)の取得
-  Eigen::Matrix4f transform_matrix;
-  transform_matrix = to_matrix4f(transform_stamped.transform);
-
   // ROSメッセージ形式の点群データをPCL形式に変換
   pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_input(new pcl::PointCloud<pcl::PointXYZ>());
   pcl::fromROSMsg(*msg, *pcl_input);
+
+  // 座標変換行列(表現行列)の取得
+  Eigen::Matrix4f transform_matrix;
+  transform_matrix = to_matrix4f(transform_stamped.transform);
 
   // 点群データの座標変換
   pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_output(new pcl::PointCloud<pcl::PointXYZ>());
@@ -76,6 +86,12 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
 
   // 変換後の点群データをパブリッシュ
   pc_pub_->publish(output_msg);
+}
+
+void PointCloudPreprocessor::print_parameters()
+{
+  RCLCPP_INFO(this->get_logger(), "target_frame_id: %s", target_frame_id_.c_str());
+  RCLCPP_INFO(this->get_logger(), "leaf_size: %f", leaf_size_);
 }
 
 }  // namespace pointcloud_preprocessor
