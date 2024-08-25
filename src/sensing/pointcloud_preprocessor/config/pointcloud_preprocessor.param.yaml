@@ -2,4 +2,4 @@
   pointcloud_preprocessor:
     ros__parameters:
       target_frame_id: base_link
-      leaf_size: 0.1
+      leaf_size: 0.05

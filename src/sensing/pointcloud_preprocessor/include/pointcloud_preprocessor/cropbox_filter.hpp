@@ -43,20 +43,64 @@ public:
   {
     // robot_infoからのパラメータの読み取りを行う。
     wheel_stuck_robot_utils::RobotInfoUtils robot_info_utils(node);
-    auto robot_info = robot_info_utils.get_info();
-    RCLCPP_INFO(node.get_logger(), "Wheel Radius: %f", robot_info.raw_info.wheel_radius_m);
-    RCLCPP_INFO(node.get_logger(), "Wheel Tread: %f", robot_info.raw_info.wheel_tread_m);
-    RCLCPP_INFO(node.get_logger(), "Front Overhang: %f", robot_info.raw_info.front_overhang_m);
-    RCLCPP_INFO(node.get_logger(), "Rear Overhang: %f", robot_info.raw_info.rear_overhang_m);
-    RCLCPP_INFO(node.get_logger(), "Left Overhang: %f", robot_info.raw_info.left_overhang_m);
-    RCLCPP_INFO(node.get_logger(), "Right Overhang: %f", robot_info.raw_info.right_overhang_m);
-    RCLCPP_INFO(node.get_logger(), "Robot Height: %f", robot_info.raw_info.robot_height_m);
+    robot_info_ = robot_info_utils.get_info();
+    // パラメーターが読み込まれた後のログ出力
+    RCLCPP_INFO(node.get_logger(), "Front Overhang: %f", robot_info_.raw_info.front_overhang_m);
 
-    // 読み取ったパラメーターでセルフクロッピングをする
+    // 必要であれば、debug_parameters()を呼び出して詳細をログ出力
+    debug_parameters();
 
-    // 指定した範囲をクロッピングする
+    // debug_parameters();
+  }
 
-    // クロッピングした値を返す
+  pcl::PointCloud<pcl::PointXYZ>::Ptr crop_box(
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr & pcl_output)
+  {
+    pcl::CropBox<pcl::PointXYZ> crop_box_filter;
+
+    Eigen::Vector4f min_pt(
+      -robot_info_.raw_info.rear_overhang_m,   // x軸負方向（後方）
+      -robot_info_.raw_info.right_overhang_m,  // y軸負方向（左側）
+      -robot_info_.raw_info.robot_height_m,    // z軸負方向（下方）
+      1.0);
+
+    Eigen::Vector4f max_pt(
+      robot_info_.raw_info.front_overhang_m,  // x軸正方向（前方）
+      robot_info_.raw_info.left_overhang_m,   // y軸正方向（右側）
+      robot_info_.raw_info.robot_height_m,    // z軸正方向（上方）
+      1.0);
+
+    crop_box_filter.setInputCloud(pcl_output);
+    crop_box_filter.setMin(min_pt);
+    crop_box_filter.setMax(max_pt);
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cropped_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    crop_box_filter.setNegative(true);
+    crop_box_filter.filter(*cropped_cloud);
+
+    return cropped_cloud;
+  }
+  // デバッグ用。パラメーターの取得の確認。
+  void debug_parameters() const
+  {
+    RCLCPP_INFO(
+      rclcpp::get_logger("CropBoxFilter"), "Wheel Radius: %f", robot_info_.raw_info.wheel_radius_m);
+    RCLCPP_INFO(
+      rclcpp::get_logger("CropBoxFilter"), "Wheel Tread: %f", robot_info_.raw_info.wheel_tread_m);
+    RCLCPP_INFO(
+      rclcpp::get_logger("CropBoxFilter"), "Front Overhang: %f",
+      robot_info_.raw_info.front_overhang_m);
+    RCLCPP_INFO(
+      rclcpp::get_logger("CropBoxFilter"), "Rear Overhang: %f",
+      robot_info_.raw_info.rear_overhang_m);
+    RCLCPP_INFO(
+      rclcpp::get_logger("CropBoxFilter"), "Left Overhang: %f",
+      robot_info_.raw_info.left_overhang_m);
+    RCLCPP_INFO(
+      rclcpp::get_logger("CropBoxFilter"), "Right Overhang: %f",
+      robot_info_.raw_info.right_overhang_m);
+    RCLCPP_INFO(
+      rclcpp::get_logger("CropBoxFilter"), "Robot Height: %f", robot_info_.raw_info.robot_height_m);
   }
 
 private:

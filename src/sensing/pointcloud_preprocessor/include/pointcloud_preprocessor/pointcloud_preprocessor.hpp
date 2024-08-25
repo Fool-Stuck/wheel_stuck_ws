@@ -41,7 +41,6 @@ class PointCloudPreprocessor : public rclcpp::Node
 {
 public:
   explicit PointCloudPreprocessor(const rclcpp::NodeOptions & options);
-  void print_parameters();  // この行を追加
 
 private:
   void process_pointcloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg);

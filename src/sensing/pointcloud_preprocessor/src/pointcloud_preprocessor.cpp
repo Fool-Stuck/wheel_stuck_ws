@@ -30,11 +30,6 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
   target_frame_id_ = declare_parameter<std::string>("target_frame_id", "base_link");
   leaf_size_ = declare_parameter<double>("leaf_size", 0.1);
 
-  // CropBoxfolterのインスタンスを作成。
-  cropbox_filter::CropBoxFilter crop_box_filter(*this);
-  // パラメーターを出力する関数を呼び出す
-  print_parameters();
-
   // 受信機を作る。
   pc_sub_ = this->create_subscription<PointCloud2>(
     "/velodyne_points", 10,
@@ -70,9 +65,15 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
   pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_output(new pcl::PointCloud<pcl::PointXYZ>());
   pcl::transformPointCloud(*pcl_input, *pcl_output, transform_matrix);
 
+  // セルフクロッピング処理
+  cropbox_filter::CropBoxFilter crop_box_filter(*this);
+  // デバッグ用のパラメータ確認メソッドを呼び出す。デバッグ用。
+  // crop_box_filter.debug_parameters();
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cropped_cloud = crop_box_filter.crop_box(pcl_output);
+
   // ダウンサンプリング
   pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
-  voxel_grid.setInputCloud(pcl_output);
+  voxel_grid.setInputCloud(cropped_cloud);
   voxel_grid.setLeafSize(leaf_size_, leaf_size_, leaf_size_);
   pcl::PointCloud<pcl::PointXYZ> downsampled_cloud;
   voxel_grid.filter(downsampled_cloud);
@@ -80,18 +81,13 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
   // 座標変換した点群データを再びROSメッセージ形式に変換
   PointCloud2 output_msg;
   pcl::toROSMsg(downsampled_cloud, output_msg);
+
   // メッセージのヘッダーを設定
   output_msg.header = msg->header;
   output_msg.header.frame_id = target_frame_id_;  // 変換後のフレームIDを設定
 
   // 変換後の点群データをパブリッシュ
   pc_pub_->publish(output_msg);
-}
-
-void PointCloudPreprocessor::print_parameters()
-{
-  RCLCPP_INFO(this->get_logger(), "target_frame_id: %s", target_frame_id_.c_str());
-  RCLCPP_INFO(this->get_logger(), "leaf_size: %f", leaf_size_);
 }
 
 }  // namespace pointcloud_preprocessor
