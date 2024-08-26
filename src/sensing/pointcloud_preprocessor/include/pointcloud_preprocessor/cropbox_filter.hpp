@@ -49,34 +49,40 @@ public:
 
     // 必要であれば、debug_parameters()を呼び出して詳細をログ出力
     debug_parameters();
-
-    // debug_parameters();
   }
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr crop_box(
-    const pcl::PointCloud<pcl::PointXYZ>::Ptr & pcl_output)
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr & pcl_output,
+    pcl::PointCloud<pcl::PointXYZ>::Ptr & cropped_cloud)
   {
-    pcl::CropBox<pcl::PointXYZ> crop_box_filter;
-
-    Eigen::Vector4f min_pt(
+    Eigen::Vector4f self_min_pt(
       -robot_info_.raw_info.rear_overhang_m,   // x軸負方向（後方）
       -robot_info_.raw_info.right_overhang_m,  // y軸負方向（左側）
       -robot_info_.raw_info.robot_height_m,    // z軸負方向（下方）
       1.0);
 
-    Eigen::Vector4f max_pt(
+    Eigen::Vector4f self_max_pt(
       robot_info_.raw_info.front_overhang_m,  // x軸正方向（前方）
       robot_info_.raw_info.left_overhang_m,   // y軸正方向（右側）
       robot_info_.raw_info.robot_height_m,    // z軸正方向（上方）
       1.0);
 
-    crop_box_filter.setInputCloud(pcl_output);
-    crop_box_filter.setMin(min_pt);
-    crop_box_filter.setMax(max_pt);
+    pcl::CropBox<pcl::PointXYZ> self_crop_box_filter;
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cropped_cloud(new pcl::PointCloud<pcl::PointXYZ>());
-    crop_box_filter.setNegative(true);
-    crop_box_filter.filter(*cropped_cloud);
+    self_crop_box_filter.setInputCloud(pcl_output);
+    self_crop_box_filter.setMin(self_min_pt);
+    self_crop_box_filter.setMax(self_max_pt);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr self_cropped_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    self_crop_box_filter.setNegative(true);
+    self_crop_box_filter.filter(*self_cropped_cloud);
+
+    pcl::CropBox<pcl::PointXYZ> area_crop_box_filter;
+    area_crop_box_filter.setInputCloud(self_cropped_cloud);
+    Eigen::Vector4f area_min_pt(-5.0, -5.0, -5.0, 1.0);
+    Eigen::Vector4f area_max_pt(5.0, 5.0, 5.0, 1.0);
+    area_crop_box_filter.setMin(area_min_pt);
+    area_crop_box_filter.setMax(area_max_pt);
+    area_crop_box_filter.filter(*cropped_cloud);
 
     return cropped_cloud;
   }

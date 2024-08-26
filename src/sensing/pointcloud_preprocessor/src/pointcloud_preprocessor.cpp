@@ -65,11 +65,12 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
   pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_output(new pcl::PointCloud<pcl::PointXYZ>());
   pcl::transformPointCloud(*pcl_input, *pcl_output, transform_matrix);
 
-  // セルフクロッピング処理
+  // クロッピング処理
   cropbox_filter::CropBoxFilter crop_box_filter(*this);
   // デバッグ用のパラメータ確認メソッドを呼び出す。デバッグ用。
   // crop_box_filter.debug_parameters();
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cropped_cloud = crop_box_filter.crop_box(pcl_output);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cropped_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+  crop_box_filter.crop_box(pcl_output, cropped_cloud);
 
   // ダウンサンプリング
   pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;

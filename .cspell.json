@@ -47,6 +47,7 @@
     "coef",
     "colcon",
     "costmap",
+    "cropbox",
     "DCMAKE",
     "downsample",
     "downsampled",
