@@ -55,7 +55,7 @@ repos:
       - id: shellcheck
 
   - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.8.0-1
+    rev: v3.9.0-1
     hooks:
       - id: shfmt
         args: [-w, -s, -i=4]
@@ -85,7 +85,7 @@ repos:
         exclude: .cu
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.29.1
+    rev: 0.29.2
     hooks:
       - id: check-metaschema
         files: ^.+/schema/.*schema\.json$
