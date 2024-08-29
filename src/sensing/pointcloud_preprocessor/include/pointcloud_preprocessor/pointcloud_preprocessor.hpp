@@ -15,6 +15,8 @@
 #ifndef POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_
 #define POINTCLOUD_PREPROCESSOR__POINTCLOUD_PREPROCESSOR_HPP_
 
+#include "pointcloud_preprocessor/cropbox_filter.hpp"
+
 #include <Eigen/Core>
 #include <rclcpp/rclcpp.hpp>
 #include <wheel_stuck_common_utils/geometry/conversion.hpp>
@@ -51,6 +53,7 @@ private:
   tf2_ros::TransformListener tf_listener_;
   std::string target_frame_id_;
   double leaf_size_;
+  cropbox_filter::CropBoxFilter crop_box_filter;
 };
 
 }  // namespace pointcloud_preprocessor

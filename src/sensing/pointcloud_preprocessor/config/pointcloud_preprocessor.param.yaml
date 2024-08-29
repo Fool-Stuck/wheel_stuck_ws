@@ -1,5 +1,11 @@
 /**:
-  pointcloud_preprocessor:
-    ros__parameters:
-      target_frame_id: base_link
-      leaf_size: 0.1
+  ros__parameters:
+    target_frame_id: base_link
+    leaf_size: 0.15
+    crop_area_min_x: -5.0
+    crop_area_min_y: -5.0
+    crop_area_min_z: -5.0
+    crop_area_max_x: 5.0
+    crop_area_max_y: 5.0
+    crop_area_max_z: 5.0
+    crop_area_w: 1.0

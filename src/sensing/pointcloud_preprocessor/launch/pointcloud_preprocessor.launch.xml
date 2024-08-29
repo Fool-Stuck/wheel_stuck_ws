@@ -2,12 +2,10 @@
   <arg name="points_topic" default="/velodyne_points"/>
   <arg name="filtered_points_topic" default="~/output/filtered_points"/>
   <arg name="config_file" default="$(find-pkg-share pointcloud_preprocessor)/config/pointcloud_preprocessor.param.yaml"/>
-  <arg name="config_file2" default="$(find-pkg-share wheel_stuck_robot_utils)/config/robot_info.param.yaml"/>
 
   <node pkg="pointcloud_preprocessor" exec="pointcloud_preprocessor_node" name="pointcloud_preprocessor" output="screen">
-    <remap from="~/input/points" to="$(var points_topic)"/>
+    <remap from="/velodyne_points" to="$(var points_topic)"/>
     <remap from="~/output/filtered_points" to="$(var filtered_points_topic)"/>
     <param from="$(var config_file)"/>
-    <param from="$(var config_file2)"/>
   </node>
 </launch>

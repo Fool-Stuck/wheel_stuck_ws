@@ -14,8 +14,6 @@
 
 #include "pointcloud_preprocessor/pointcloud_preprocessor.hpp"
 
-#include "pointcloud_preprocessor/cropbox_filter.hpp"
-
 #include <wheel_stuck_robot_utils/robot_info.hpp>
 
 namespace pointcloud_preprocessor
@@ -23,7 +21,8 @@ namespace pointcloud_preprocessor
 PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & options)
 : Node("pointcloud_preprocessor", options),
   tf_buffer_(this->get_clock()),  // tf2_ros::Bufferの初期化
-  tf_listener_(tf_buffer_)        // tf2_ros::TransformListenerの初期化
+  tf_listener_(tf_buffer_),       // tf2_ros::TransformListenerの初期化
+  crop_box_filter(*this)
 
 {
   // パラメーターの宣言
@@ -41,7 +40,6 @@ PointCloudPreprocessor::PointCloudPreprocessor(const rclcpp::NodeOptions & optio
 
 void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointCloud2::SharedPtr msg)
 {
-  // std::cout << "Frame ID: " << msg->header.frame_id << std::endl;
   geometry_msgs::msg::TransformStamped transform_stamped;
 
   try {
@@ -62,26 +60,23 @@ void PointCloudPreprocessor::process_pointcloud(const sensor_msgs::msg::PointClo
   transform_matrix = to_matrix4f(transform_stamped.transform);
 
   // 点群データの座標変換
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_output(new pcl::PointCloud<pcl::PointXYZ>());
-  pcl::transformPointCloud(*pcl_input, *pcl_output, transform_matrix);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_transformed(new pcl::PointCloud<pcl::PointXYZ>());
+  pcl::transformPointCloud(*pcl_input, *pcl_transformed, transform_matrix);
 
   // クロッピング処理
-  cropbox_filter::CropBoxFilter crop_box_filter(*this);
-  // デバッグ用のパラメータ確認メソッドを呼び出す。デバッグ用。
-  // crop_box_filter.debug_parameters();
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cropped_cloud(new pcl::PointCloud<pcl::PointXYZ>());
-  crop_box_filter.crop_box(pcl_output, cropped_cloud);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_cropped(new pcl::PointCloud<pcl::PointXYZ>());
+  crop_box_filter.crop_box(pcl_transformed, pcl_cropped);
 
   // ダウンサンプリング
   pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
-  voxel_grid.setInputCloud(cropped_cloud);
+  voxel_grid.setInputCloud(pcl_cropped);
   voxel_grid.setLeafSize(leaf_size_, leaf_size_, leaf_size_);
-  pcl::PointCloud<pcl::PointXYZ> downsampled_cloud;
-  voxel_grid.filter(downsampled_cloud);
+  pcl::PointCloud<pcl::PointXYZ> pcl_downsampled;
+  voxel_grid.filter(pcl_downsampled);
 
   // 座標変換した点群データを再びROSメッセージ形式に変換
   PointCloud2 output_msg;
-  pcl::toROSMsg(downsampled_cloud, output_msg);
+  pcl::toROSMsg(pcl_downsampled, output_msg);
 
   // メッセージのヘッダーを設定
   output_msg.header = msg->header;

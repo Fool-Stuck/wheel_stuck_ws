@@ -44,73 +44,68 @@ public:
     // robot_infoからのパラメータの読み取りを行う。
     wheel_stuck_robot_utils::RobotInfoUtils robot_info_utils(node);
     robot_info_ = robot_info_utils.get_info();
-    // パラメーターが読み込まれた後のログ出力
-    RCLCPP_INFO(node.get_logger(), "Front Overhang: %f", robot_info_.raw_info.front_overhang_m);
 
-    // 必要であれば、debug_parameters()を呼び出して詳細をログ出力
-    debug_parameters();
+    self_min_pt_ = Eigen::Vector4f(
+      -robot_info_.raw_info.rear_overhang_m,  // x軸負方向（後方）
+      -robot_info_.raw_info.right_overhang_m -
+        robot_info_.raw_info.wheel_tread_m / 2.0,  // y軸負方向（右側）
+      -robot_info_.raw_info.robot_height_m -
+        robot_info_.raw_info.wheel_radius_m,  // z軸負方向（下方）
+      1.0);
+    self_max_pt_ = Eigen::Vector4f(
+      robot_info_.raw_info.front_overhang_m,  // x軸正方向（前方）
+      robot_info_.raw_info.left_overhang_m +
+        robot_info_.raw_info.wheel_tread_m / 2.0,  // y軸正方向（左側）
+      robot_info_.raw_info.robot_height_m -
+        robot_info_.raw_info.wheel_radius_m,  // z軸正方向（上方）
+      1.0);
+
+    min_x_ = node.declare_parameter<double>("crop_area_min_x", -1.0);
+    min_y_ = node.declare_parameter<double>("crop_area_min_y", -1.0);
+    min_z_ = node.declare_parameter<double>("crop_area_min_z", -1.0);
+    max_x_ = node.declare_parameter<double>("crop_area_max_x", 1.0);
+    max_y_ = node.declare_parameter<double>("crop_area_max_y", 1.0);
+    max_z_ = node.declare_parameter<double>("crop_area_max_z", 1.0);
+    crop_area_w_ = node.declare_parameter<double>("crop_area_w", 1.0);
+
+    area_min_pt_ = Eigen::Vector4f(min_x_, min_y_, min_z_, crop_area_w_);
+    area_max_pt_ = Eigen::Vector4f(max_x_, max_y_, max_z_, crop_area_w_);
   }
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr crop_box(
-    const pcl::PointCloud<pcl::PointXYZ>::Ptr & pcl_output,
-    pcl::PointCloud<pcl::PointXYZ>::Ptr & cropped_cloud)
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr & pcl_input_cloud,
+    pcl::PointCloud<pcl::PointXYZ>::Ptr & pcl_cropped_cloud)
   {
-    Eigen::Vector4f self_min_pt(
-      -robot_info_.raw_info.rear_overhang_m,   // x軸負方向（後方）
-      -robot_info_.raw_info.right_overhang_m,  // y軸負方向（左側）
-      -robot_info_.raw_info.robot_height_m,    // z軸負方向（下方）
-      1.0);
-
-    Eigen::Vector4f self_max_pt(
-      robot_info_.raw_info.front_overhang_m,  // x軸正方向（前方）
-      robot_info_.raw_info.left_overhang_m,   // y軸正方向（右側）
-      robot_info_.raw_info.robot_height_m,    // z軸正方向（上方）
-      1.0);
-
-    pcl::CropBox<pcl::PointXYZ> self_crop_box_filter;
-
-    self_crop_box_filter.setInputCloud(pcl_output);
-    self_crop_box_filter.setMin(self_min_pt);
-    self_crop_box_filter.setMax(self_max_pt);
+    self_crop_box_filter.setInputCloud(pcl_input_cloud);
+    self_crop_box_filter.setMin(self_min_pt_);
+    self_crop_box_filter.setMax(self_max_pt_);
     pcl::PointCloud<pcl::PointXYZ>::Ptr self_cropped_cloud(new pcl::PointCloud<pcl::PointXYZ>());
     self_crop_box_filter.setNegative(true);
     self_crop_box_filter.filter(*self_cropped_cloud);
 
-    pcl::CropBox<pcl::PointXYZ> area_crop_box_filter;
     area_crop_box_filter.setInputCloud(self_cropped_cloud);
-    Eigen::Vector4f area_min_pt(-5.0, -5.0, -5.0, 1.0);
-    Eigen::Vector4f area_max_pt(5.0, 5.0, 5.0, 1.0);
-    area_crop_box_filter.setMin(area_min_pt);
-    area_crop_box_filter.setMax(area_max_pt);
-    area_crop_box_filter.filter(*cropped_cloud);
+    area_crop_box_filter.setMin(area_min_pt_);
+    area_crop_box_filter.setMax(area_max_pt_);
+    area_crop_box_filter.filter(*pcl_cropped_cloud);
 
-    return cropped_cloud;
-  }
-  // デバッグ用。パラメーターの取得の確認。
-  void debug_parameters() const
-  {
-    RCLCPP_INFO(
-      rclcpp::get_logger("CropBoxFilter"), "Wheel Radius: %f", robot_info_.raw_info.wheel_radius_m);
-    RCLCPP_INFO(
-      rclcpp::get_logger("CropBoxFilter"), "Wheel Tread: %f", robot_info_.raw_info.wheel_tread_m);
-    RCLCPP_INFO(
-      rclcpp::get_logger("CropBoxFilter"), "Front Overhang: %f",
-      robot_info_.raw_info.front_overhang_m);
-    RCLCPP_INFO(
-      rclcpp::get_logger("CropBoxFilter"), "Rear Overhang: %f",
-      robot_info_.raw_info.rear_overhang_m);
-    RCLCPP_INFO(
-      rclcpp::get_logger("CropBoxFilter"), "Left Overhang: %f",
-      robot_info_.raw_info.left_overhang_m);
-    RCLCPP_INFO(
-      rclcpp::get_logger("CropBoxFilter"), "Right Overhang: %f",
-      robot_info_.raw_info.right_overhang_m);
-    RCLCPP_INFO(
-      rclcpp::get_logger("CropBoxFilter"), "Robot Height: %f", robot_info_.raw_info.robot_height_m);
+    return pcl_cropped_cloud;
   }
 
 private:
   wheel_stuck_robot_utils::RobotInfo robot_info_;
+  Eigen::Vector4f self_min_pt_;
+  Eigen::Vector4f self_max_pt_;
+  Eigen::Vector4f area_min_pt_;
+  Eigen::Vector4f area_max_pt_;
+  pcl::CropBox<pcl::PointXYZ> self_crop_box_filter;
+  pcl::CropBox<pcl::PointXYZ> area_crop_box_filter;
+  double min_x_;
+  double min_y_;
+  double min_z_;
+  double max_x_;
+  double max_y_;
+  double max_z_;
+  double crop_area_w_;
 };
 
 }  // namespace cropbox_filter
