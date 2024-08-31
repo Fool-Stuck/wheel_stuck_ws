@@ -12,6 +12,8 @@
     <arg name="sensor_kit_model" value="$(var sensor_kit_model)"/>
   </include>
 
+  <include file="$(find-pkg-share pointcloud_preprocessor)/launch/pointcloud_preprocessor.launch.xml"/>
+
   <group>
     <push-ros-namespace namespace="robot"/>
     <include file="$(find-pkg-share $(var robot_model)_launcher)/launch/robot.launch.xml"/>
