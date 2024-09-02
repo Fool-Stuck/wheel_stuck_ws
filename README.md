@@ -57,4 +57,18 @@ Fool Stuck Robot
 
 ## 2. Run
 
+## 3.Pre-Commit Setup Instructions for Developers
+
+1. Install pre-commit
+
+   ```bash
+   pip install pre-commit
+   ```
+
+2. Enable pre-commit hooks
+
+   ```bash
+   install pre-commit
+   ```
+
 ## LICENSE
