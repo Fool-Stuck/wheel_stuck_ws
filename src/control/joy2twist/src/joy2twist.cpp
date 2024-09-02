@@ -18,7 +18,7 @@ namespace joy2twist
 {
 Joy2Twist::Joy2Twist(const rclcpp::NodeOptions & options) : Node("joy2twist", options)
 {
-  // パラメータの取得
+  // パラメータの取得。
   std::string linear_x_axis_str = declare_parameter<std::string>("linear_x_axis", "LEFT_STICK_Y");
   std::string angular_z_axis_str = declare_parameter<std::string>("angular_z_axis", "LEFT_STICK_X");
 
