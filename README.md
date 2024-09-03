@@ -66,6 +66,10 @@ Fool Stuck Robot
    ```
 
 2. Enable pre-commit hooks
+   
+   ```bash
+   cd /path/to/wheel_stuck_ws
+   ```
 
    ```bash
    pre-commit install
