@@ -68,7 +68,7 @@ Fool Stuck Robot
 2. Enable pre-commit hooks
 
    ```bash
-   install pre-commit
+   pre-commit install
    ```
 
 ## LICENSE
