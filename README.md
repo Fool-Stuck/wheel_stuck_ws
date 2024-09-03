@@ -74,5 +74,4 @@ Fool Stuck Robot
    ```bash
    pre-commit install
    ```
-
 ## LICENSE
