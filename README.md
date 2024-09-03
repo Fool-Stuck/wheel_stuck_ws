@@ -57,7 +57,7 @@ Fool Stuck Robot
 
 ## 2. Run
 
-## 3.Pre-Commit Setup Instructions for Developers
+## 3. Pre-Commit Setup Instructions for Developers
 
 1. Install pre-commit
 
