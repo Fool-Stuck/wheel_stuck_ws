@@ -1,5 +1,4 @@
 /**:
-  joy2twist:
-    ros__parameters:
-      linear_x_axis: "LEFT_STICK_Y"
-      angular_z_axis: "LEFT_STICK_X"
+  ros__parameters:
+    linear_x_axis: "LEFT_STICK_Y"
+    angular_z_axis: "LEFT_STICK_X"
