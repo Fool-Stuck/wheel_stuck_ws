@@ -15,8 +15,6 @@
 #ifndef MULTI_LAYERED_POINTCLOUD_FILTER__POINTCLOUD_FILTER_BASE_HPP_
 #define MULTI_LAYERED_POINTCLOUD_FILTER__POINTCLOUD_FILTER_BASE_HPP_
 
-#include <rclcpp/rclcpp.hpp>
-
 #include <sensor_msgs/msg/point_cloud2.hpp>
 
 #include <memory>

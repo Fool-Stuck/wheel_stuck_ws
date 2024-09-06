@@ -17,8 +17,6 @@
 
 #include "multi_layered_pointcloud_filter/pointcloud_filter_base.hpp"
 
-#include <rclcpp/rclcpp.hpp>
-
 #include <memory>
 #include <vector>
 

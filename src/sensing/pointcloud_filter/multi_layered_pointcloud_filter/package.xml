@@ -9,7 +9,6 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
-  <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
 
   <export>
