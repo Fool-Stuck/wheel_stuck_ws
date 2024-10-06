@@ -77,7 +77,7 @@ class DDTMotorDriver:
         if len(target_speeds_mps) != 8:
             raise ValueError("速度指令はID 1〜8までの設定を配列で与える必要があります。")
 
-        rpms = [0.0] * 8
+        rpm_list = [0.0] * 8
 
         for i, target_speed_mps in enumerate(target_speeds_mps):
             """
@@ -99,28 +99,28 @@ class DDTMotorDriver:
 
             # 更新された速度
             self.current_speeds[i] += speed_diff
-            rpms[i] = self.mps_to_rpm(self.current_speeds[i])
+            rpm_list[i] = self.mps_to_rpm(self.current_speeds[i])
 
         # CAN メッセージを構築して送信
         speed_command0 = [
-            (rpms[0] >> 8) & 0xFF,
-            rpms[0] & 0xFF,
-            (rpms[1] >> 8) & 0xFF,
-            rpms[1] & 0xFF,
-            (rpms[2] >> 8) & 0xFF,
-            rpms[2] & 0xFF,
-            (rpms[3] >> 8) & 0xFF,
-            rpms[3] & 0xFF,
+            (rpm_list[0] >> 8) & 0xFF,
+            rpm_list[0] & 0xFF,
+            (rpm_list[1] >> 8) & 0xFF,
+            rpm_list[1] & 0xFF,
+            (rpm_list[2] >> 8) & 0xFF,
+            rpm_list[2] & 0xFF,
+            (rpm_list[3] >> 8) & 0xFF,
+            rpm_list[3] & 0xFF,
         ]
         speed_command1 = [
-            (rpms[4] >> 8) & 0xFF,
-            rpms[4] & 0xFF,
-            (rpms[5] >> 8) & 0xFF,
-            rpms[5] & 0xFF,
-            (rpms[6] >> 8) & 0xFF,
-            rpms[6] & 0xFF,
-            (rpms[7] >> 8) & 0xFF,
-            rpms[7] & 0xFF,
+            (rpm_list[4] >> 8) & 0xFF,
+            rpm_list[4] & 0xFF,
+            (rpm_list[5] >> 8) & 0xFF,
+            rpm_list[5] & 0xFF,
+            (rpm_list[6] >> 8) & 0xFF,
+            rpm_list[6] & 0xFF,
+            (rpm_list[7] >> 8) & 0xFF,
+            rpm_list[7] & 0xFF,
         ]
 
         msg0 = can.Message(arbitration_id=0x32, data=speed_command0, is_extended_id=False)
