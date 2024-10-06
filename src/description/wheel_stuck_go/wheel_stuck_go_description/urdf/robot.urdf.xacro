@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="robot_info" value="${xacro.load_yaml('$(find wheel_stuck_go_description)/config/robot_info.param.yaml')}"/>
+
+  <link name="base_link"/>
+</robot>

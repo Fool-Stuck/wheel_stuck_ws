@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
-project(wheel_stuck_common_utils)
+project(ground_segmentation)
 
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 14)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
@@ -16,13 +16,22 @@ ament_auto_find_build_dependencies()
 
 include_directories(include)
 
+ament_auto_add_library(ground_segmentation SHARED
+  src/ground_filter.cpp
+  src/ransac_ground_filter/ransac_ground_filter.cpp
+)
+
+rclcpp_components_register_node(ground_segmentation
+  PLUGIN "ground_segmentation::ransac_ground_filter::RANSACGroundFilter"
+  EXECUTABLE ransac_ground_filter_node
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
-
-  ament_auto_add_gtest(test_wheel_stuck_common_utils test/test_wheel_stuck_common_utils.cpp)
-  file(GLOB TEST_SOURCES "test/**/*.cpp")
-  target_sources(test_wheel_stuck_common_utils PRIVATE ${TEST_SOURCES})
 endif()
 
-ament_auto_package()
+ament_auto_package(INSTALL_TO_SHARE
+  config
+  launch
+)

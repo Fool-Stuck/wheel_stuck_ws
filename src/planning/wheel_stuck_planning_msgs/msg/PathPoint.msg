@@ -1,0 +1,2 @@
+geometry_msgs/Pose pose
+wheel_stuck_planning_msgs/PathPointAttribute[] attributes

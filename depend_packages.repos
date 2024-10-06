@@ -5,8 +5,8 @@ repositories:
     version: feature/ros2
   driver/velodyne:
     type: git
-    url: https://github.com/ros-drivers/velodyne.git
-    version: ros2
+    url: https://github.com/Autumn60/velodyne.git
+    version: ros2_hdl
   simulation/ros_tcp_endpoint:
     type: git
     url: https://github.com/Unity-Technologies/ROS-TCP-Endpoint
