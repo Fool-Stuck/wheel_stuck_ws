@@ -14,4 +14,5 @@ src/robot/wheel_stuck_robot_utils/** @Autumn60
 src/sample/robot_info_user/** @Autumn60
 src/sample/simple_int_publisher/** @Autumn60
 src/sample/simple_int_subscriber/** @Autumn60
+src/sensing/pointcloud_filter/** @Autumn60
 README.md @RyodoTanaka
