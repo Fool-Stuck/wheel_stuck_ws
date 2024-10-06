@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="robot_info" value="${xacro.load_yaml('$(find fourth_robot_description)/config/robot_info.param.yaml')}"/>
+
+  <xacro:include filename="$(find fourth_robot_description)/urdf/wheel/wheel.urdf.xacro"/>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://fourth_robot_description/mesh/base/base.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="footprint_link"/>
+  <joint name="footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="footprint_link"/>
+    <origin xyz="0 0 -${robot_info['/**']['ros__parameters']['wheel_radius']}" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:wheel name="left_wheel" parent="base_link" wheel_radius="${robot_info['/**']['ros__parameters']['wheel_radius']}">
+    <origin xyz="0 ${robot_info['/**']['ros__parameters']['wheel_tread'] / 2} 0" rpy="0 0 0"/>
+  </xacro:wheel>
+
+  <xacro:wheel name="right_wheel" parent="base_link" wheel_radius="${robot_info['/**']['ros__parameters']['wheel_radius']}">
+    <origin xyz="0 -${robot_info['/**']['ros__parameters']['wheel_tread'] / 2} 0" rpy="0 0 ${pi}"/>
+  </xacro:wheel>
+</robot>

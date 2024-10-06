@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="sensors_calibration" value="${xacro.load_yaml('$(find fourth_robot_sensor_kit_description)/config/sensors_calibration.param.yaml')}"/>
+
+  <xacro:include filename="$(find fourth_robot_sensor_kit_description)/urdf/front_lrf/front_lrf.urdf.xacro"/>
+  <xacro:include filename="$(find fourth_robot_sensor_kit_description)/urdf/rear_lrf/rear_lrf.urdf.xacro"/>
+  <xacro:include filename="$(find fourth_robot_sensor_kit_description)/urdf/gim30/gim30.urdf.xacro"/>
+  <xacro:include filename="$(find fourth_robot_sensor_kit_description)/urdf/gps/gps.urdf.xacro"/>
+
+  <xacro:front_lrf name="front_lrf" parent="base_link">
+    <origin
+      xyz="${sensors_calibration['base_link']['front_lrf_link']['x']}
+              ${sensors_calibration['base_link']['front_lrf_link']['y']}
+              ${sensors_calibration['base_link']['front_lrf_link']['z']}"
+      rpy="${sensors_calibration['base_link']['front_lrf_link']['roll']}
+              ${sensors_calibration['base_link']['front_lrf_link']['pitch']}
+              ${sensors_calibration['base_link']['front_lrf_link']['yaw']}"
+    />
+  </xacro:front_lrf>
+
+  <xacro:rear_lrf name="rear_lrf" parent="base_link">
+    <origin
+      xyz="${sensors_calibration['base_link']['rear_lrf_link']['x']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['y']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['z']}"
+      rpy="${sensors_calibration['base_link']['rear_lrf_link']['roll']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['pitch']}
+              ${sensors_calibration['base_link']['rear_lrf_link']['yaw']}"
+    />
+  </xacro:rear_lrf>
+
+  <xacro:gim30 name="gim30" parent="base_link">
+    <origin
+      xyz="${sensors_calibration['base_link']['gim30_link']['x']}
+              ${sensors_calibration['base_link']['gim30_link']['y']}
+              ${sensors_calibration['base_link']['gim30_link']['z']}"
+      rpy="${sensors_calibration['base_link']['gim30_link']['roll']}
+              ${sensors_calibration['base_link']['gim30_link']['pitch']}
+              ${sensors_calibration['base_link']['gim30_link']['yaw']}"
+    />
+  </xacro:gim30>
+
+  <xacro:gps name="gps" parent="base_link">
+    <origin
+      xyz="${sensors_calibration['base_link']['gps_link']['x']}
+              ${sensors_calibration['base_link']['gps_link']['y']}
+              ${sensors_calibration['base_link']['gps_link']['z']}"
+      rpy="${sensors_calibration['base_link']['gps_link']['roll']}
+              ${sensors_calibration['base_link']['gps_link']['pitch']}
+              ${sensors_calibration['base_link']['gps_link']['yaw']}"
+    />
+  </xacro:gps>
+</robot>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="model_wheel_radius" value="0.193125"/>
+
+  <xacro:macro name="wheel" params="name parent wheel_radius *joint_origin">
+    <link name="${name}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://fourth_robot_description/mesh/wheel/wheel.dae" scale="${wheel_radius / model_wheel_radius} 1 ${wheel_radius / model_wheel_radius}"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="joint_origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+  </xacro:macro>
+</robot>
