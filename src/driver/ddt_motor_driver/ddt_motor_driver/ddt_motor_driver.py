@@ -1,6 +1,8 @@
-import can
-import time
 import math
+import time
+
+import can
+
 
 class DDTMotorDriver:
     def __init__(self, max_speed_mps, wheel_diameter, max_acceleration_mps2):
@@ -13,8 +15,8 @@ class DDTMotorDriver:
         self.wheel_circumference = math.pi * wheel_diameter  # 円周を計算
         self.max_acceleration_mps2 = max_acceleration_mps2  # 最大加速度
         self.current_speeds = [0.0] * 8  # 現在の各モーターの速度[m/s]
-        self.bus = can.interface.Bus(channel='can0', interface='socketcan')  # CANインターフェース
-        
+        self.bus = can.interface.Bus(channel="can0", interface="socketcan")  # CANインターフェース
+
         # 初期化: モーターを初期化し、速度制御モードに切り替える
         self.initialize_motor()
 
@@ -32,11 +34,7 @@ class DDTMotorDriver:
     def set_mode_enable(self):
         # ID 1 to 8 をenableに
         init_command = [0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A]
-        msg = can.Message(
-            arbitration_id=0x105,
-            data=init_command,
-            is_extended_id=False
-        )
+        msg = can.Message(arbitration_id=0x105, data=init_command, is_extended_id=False)
         try:
             self.bus.send(msg)
             time.sleep(1)
@@ -49,11 +47,7 @@ class DDTMotorDriver:
         モーターを速度制御モードに設定する
         """
         velocity_control_command = [0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02]
-        msg = can.Message(
-            arbitration_id=0x105,
-            data=velocity_control_command,
-            is_extended_id=False
-        )
+        msg = can.Message(arbitration_id=0x105, data=velocity_control_command, is_extended_id=False)
         try:
             self.bus.send(msg)
             print("モーターを速度制御モードに設定しました。")
@@ -65,11 +59,7 @@ class DDTMotorDriver:
         モーターをDisableにする
         """
         torque_control_command = [0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09]
-        msg = can.Message(
-            arbitration_id=0x105,
-            data=torque_control_command,
-            is_extended_id=False
-        )
+        msg = can.Message(arbitration_id=0x105, data=torque_control_command, is_extended_id=False)
         try:
             self.bus.send(msg)
             print("モーターをトルク制御モードに設定しました。")
@@ -85,7 +75,7 @@ class DDTMotorDriver:
             raise ValueError("速度指令はID 1〜8までの設定を配列で与える必要があります。")
 
         rpms = [0.0] * 8
-        
+
         for i, target_speed_mps in enumerate(target_speeds_mps):
             """
             指定された速度[m/s]をモーターに送信する前に、加速度制限を考慮して速度を調整
@@ -96,7 +86,9 @@ class DDTMotorDriver:
 
             # 加速度制限を考慮して新しい速度を決定
             speed_diff = target_speed_mps - self.current_speeds[i]
-            max_speed_change = self.max_acceleration_mps2 * 0.1  # 加速度制限に基づいた最大速度変化量（0.1秒ごとに制御）
+            max_speed_change = (
+                self.max_acceleration_mps2 * 0.1
+            )  # 加速度制限に基づいた最大速度変化量（0.1秒ごとに制御）
 
             if abs(speed_diff) > max_speed_change:
                 # 加速度制限を超えないように調整
@@ -107,21 +99,29 @@ class DDTMotorDriver:
             rpms[i] = self.mps_to_rpm(self.current_speeds[i])
 
         # CAN メッセージを構築して送信
-        speed_command0 = [(rpms[0] >> 8) & 0xFF, rpms[0] & 0xFF, (rpms[1] >> 8) & 0xFF, rpms[1] & 0xFF, 
-                          (rpms[2] >> 8) & 0xFF, rpms[2] & 0xFF, (rpms[3] >> 8) & 0xFF, rpms[3] & 0xFF]
-        speed_command1 = [(rpms[4] >> 8) & 0xFF, rpms[4] & 0xFF, (rpms[5] >> 8) & 0xFF, rpms[5] & 0xFF, 
-                          (rpms[6] >> 8) & 0xFF, rpms[6] & 0xFF, (rpms[7] >> 8) & 0xFF, rpms[7] & 0xFF]
+        speed_command0 = [
+            (rpms[0] >> 8) & 0xFF,
+            rpms[0] & 0xFF,
+            (rpms[1] >> 8) & 0xFF,
+            rpms[1] & 0xFF,
+            (rpms[2] >> 8) & 0xFF,
+            rpms[2] & 0xFF,
+            (rpms[3] >> 8) & 0xFF,
+            rpms[3] & 0xFF,
+        ]
+        speed_command1 = [
+            (rpms[4] >> 8) & 0xFF,
+            rpms[4] & 0xFF,
+            (rpms[5] >> 8) & 0xFF,
+            rpms[5] & 0xFF,
+            (rpms[6] >> 8) & 0xFF,
+            rpms[6] & 0xFF,
+            (rpms[7] >> 8) & 0xFF,
+            rpms[7] & 0xFF,
+        ]
 
-        msg0 = can.Message(
-            arbitration_id=0x32,
-            data=speed_command0,
-            is_extended_id=False
-        )
-        msg1 = can.Message(
-            arbitration_id=0x33,
-            data=speed_command1,
-            is_extended_id=False
-        )
+        msg0 = can.Message(arbitration_id=0x32, data=speed_command0, is_extended_id=False)
+        msg1 = can.Message(arbitration_id=0x33, data=speed_command1, is_extended_id=False)
 
         try:
             self.bus.send(msg0)
@@ -144,10 +144,11 @@ class DDTMotorDriver:
         self.bus.shutdown()
         print("CANバスをシャットダウンしました。")
 
+
 # 使用例:
 # if __name__ == "__main__":
 #     motor_controller = DDTMotorDriver(max_speed_mps=1.6, wheel_diameter=0.185, max_acceleration_mps2=0.5)
-#     motor_controller.set_speed([1.1, -1.1, 0, 0, 0, 0, 0, 0]) 
+#     motor_controller.set_speed([1.1, -1.1, 0, 0, 0, 0, 0, 0])
 #     time.sleep(3)
 #     motor_controller.stop_motor()    # モーターを停止
 #     motor_controller.shutdown()      # CANバスを閉じる

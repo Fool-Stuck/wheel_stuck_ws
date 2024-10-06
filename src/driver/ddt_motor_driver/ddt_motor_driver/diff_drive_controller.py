@@ -1,5 +1,6 @@
 import math
 
+
 class DiffDrive:
     def __init__(self, wheel_radius, wheel_base):
         """
@@ -35,6 +36,7 @@ class DiffDrive:
         right_wheel_speed = linear_velocity + (angular_velocity * self.wheel_base) / 2
 
         return left_wheel_speed, right_wheel_speed
+
 
 # 使用例
 if __name__ == "__main__":
