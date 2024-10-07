@@ -1,0 +1,11 @@
+<launch>
+  <arg name="points_topic" default="/velodyne_points"/>
+  <arg name="filtered_points_topic" default="~/output/filtered_points"/>
+  <arg name="config_file" default="$(find-pkg-share pointcloud_preprocessor)/config/pointcloud_preprocessor.param.yaml"/>
+
+  <node pkg="pointcloud_preprocessor" exec="pointcloud_preprocessor_node" name="pointcloud_preprocessor" output="screen">
+    <remap from="/velodyne_points" to="$(var points_topic)"/>
+    <remap from="~/output/filtered_points" to="$(var filtered_points_topic)"/>
+    <param from="$(var config_file)"/>
+  </node>
+</launch>
